@@ -71,6 +71,34 @@ cc -Iinclude -I<engine_dir> \
    -o doom
 ```
 
+### Filter the engine glob
+
+A bare `<engine_dir>/*.c` glob is fine for a first try, but it pulls in files
+that conflict with your platform file or need libraries you don't have. Two
+categories must be excluded:
+
+- **Platform backends** (`doomgeneric_allegro.c`, `doomgeneric_sdl.c`,
+  `doomgeneric_xlib.c`, …) — each defines its own `DG_*` symbols, which clash
+  with the ones in `platform_myplatform.c` (duplicate-symbol link errors). Only
+  your platform file should provide them.
+- **Sound/driver stubs** (`i_allegrosound.c`, `i_allegromusic.c`,
+  `i_sdlsound.c`, `i_sdlmusic.c`, `gusconf.c`, `mus2mid.c`, `icon.c`) — they
+  require Allegro, SDL_mixer, or platform headers, and sound is out of scope for
+  the six visual `DG_*` callbacks this package covers.
+
+Replace the glob line with a filtered one (adjust the names for whatever
+backends your engine checkout ships):
+
+```sh
+$(ls <engine_dir>/*.c | grep -vE '(doomgeneric_|i_allegro|i_sdlsound|i_sdlmusic|gusconf|mus2mid|icon)')
+```
+
+The `doomgeneric_` prefix filter is safe because the engine core is plain
+`doomgeneric.c` (no underscore) — only the `doomgeneric_*.c` files are backends.
+This is exactly what the SDL port does — see
+[`examples/platforms/sdl/README.md`](../examples/platforms/sdl/README.md) for
+the full, runnable command.
+
 (For pixel conversion the engine already contains its own `i_video.c`; the
 `dg_palette` / `dg_framebuffer` helpers in this package are the clean, tested
 reference for that same math — useful if you write a from-scratch video path.)

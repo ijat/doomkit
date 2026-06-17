@@ -15,10 +15,15 @@ project(doom)
 set(ENGINE_DIR  ${CMAKE_SOURCE_DIR}/engine)              # upstream engine sources
 set(PKG_DIR     ${CMAKE_SOURCE_DIR}/../../../../../../..) # doomkit root
 
-# Engine sources: every .c EXCEPT the desktop platform files (doomgeneric_*.c),
-# because native-doom.cpp provides the DG_* symbols itself.
+# Engine sources: every .c EXCEPT two categories a naive *.c glob wrongly pulls
+# in (see examples/platforms/sdl/README.md for the same exclusion list):
+#   * desktop platform backends (doomgeneric_*.c) -- native-doom.cpp provides the
+#     DG_* symbols itself, so these would clash (duplicate symbols).
+#   * sound/driver stubs (i_sdlsound.c, i_sdlmusic.c, i_allegro*.c, gusconf.c,
+#     mus2mid.c, icon.c) -- they need SDL_mixer/Allegro/desktop headers not
+#     present on Android, and this build is silent (no DG_* sound callbacks).
 file(GLOB ENGINE_SRC ${ENGINE_DIR}/*.c)
-list(FILTER ENGINE_SRC EXCLUDE REGEX "doomgeneric_.*\\.c$")
+list(FILTER ENGINE_SRC EXCLUDE REGEX "(doomgeneric_.*|i_sdl.*|i_allegro.*|gusconf|mus2mid|icon)\\.c$")
 
 add_library(doom SHARED
     native-doom.cpp
