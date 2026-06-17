@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Unit tests on Linux and macOS. Needs only a C compiler + make (Unity is
+  # vendored), so no dependency install step.
+  test:
+    name: tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: make test
+        run: make test
+
+  # Enforce 100% coverage of src/ using the LLVM/Apple toolchain on macOS.
+  coverage:
+    name: coverage (100% of src/)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: make coverage + enforce 100%
+        run: |
+          make coverage
+          python3 - <<'PY'
+          import json, subprocess
+          out = subprocess.check_output([
+              "xcrun", "llvm-cov", "export",
+              "build/cov_keyqueue",
+              "-object", "build/cov_keymap",
+              "-object", "build/cov_palette",
+              "-object", "build/cov_framebuffer",
+              "-instr-profile=build/merged.profdata",
+              "-summary-only",
+              "src/dg_keyqueue.c", "src/dg_keymap.c",
+              "src/dg_palette.c", "src/dg_framebuffer.c",
+          ])
+          totals = json.loads(out)["data"][0]["totals"]
+          ok = True
+          for k in ("lines", "regions", "branches", "functions"):
+              pct = totals[k]["percent"]
+              print(f"{k:10} {pct:.2f}%")
+              if pct < 100.0:
+                  ok = False
+          if not ok:
+              raise SystemExit("coverage below 100% for src/")
+          print("all src/ metrics at 100%")
+          PY

@@ -55,8 +55,12 @@ python3 -m http.server 8000
 ```
 
 Open <http://localhost:8000/>, click **Choose File**, pick your `doom.wad`, and
-play. Arrows move, **Ctrl** fires, **Space** opens doors, **Enter/Esc** drive the
-menus.
+play. Arrows move, **Z** fires, **Space** opens doors, **Shift** runs, **Alt**
+strafes, **1–9** pick weapons, **Enter/Esc** drive the menus.
+
+> Fire is **Z**, not Ctrl, on purpose: macOS treats **Ctrl+Arrow** as a Mission
+> Control shortcut at the OS level, so binding fire to Ctrl would switch desktops
+> every time you shoot while moving. (The browser can't intercept that.)
 
 ## How the key pieces work
 
