@@ -57,3 +57,13 @@ pump to `DG_GetKey`.
 
 Controls: arrows move, **Ctrl** fires, **Space** opens doors, **Esc** opens the
 menu.
+
+## No sound — by design
+
+This port is **silent**. doomkit covers the six visual `DG_*` callbacks; sound
+is out of scope for this package.
+
+If you need sound, use the upstream doomgeneric SDL port directly
+(`Makefile.sdl` in the engine repo). It defines `FEATURE_SOUND`, links
+`SDL2_mixer`, and compiles in `i_sdlsound.c`, `i_sdlmusic.c`, and `mus2mid.c`
+— the parts this build intentionally excludes.
