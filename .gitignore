@@ -5,3 +5,13 @@ build/
 *.gcda
 *.gcno
 frame.ppm
+
+# language example build artifacts
+examples/languages/*/lib/
+examples/languages/go/lib/
+examples/languages/rust/target/
+examples/languages/csharp/bin/
+examples/languages/csharp/obj/
+**/*.class
+__pycache__/
+*.pyc

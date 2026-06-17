@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- A minimal console app. .NET 6+ has the P/Invoke + marshalling we use. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <AssemblyName>doomdemo</AssemblyName>
+    <!-- Delegate-to-function-pointer marshalling needs the built-in marshaller. -->
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Copy the native library next to the binary if you place it here.
+       Uncomment and adjust the path to have `dotnet build` bundle it:
+  <ItemGroup>
+    <None Include="lib/libdoomgeneric.dylib" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  -->
+
+</Project>

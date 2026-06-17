@@ -44,11 +44,15 @@ genericdoom-cleancode/
 │   └── dg_framebuffer.h      · centring/scaling math API
 ├── src/                      ← PURE, TESTABLE LOGIC (100% covered)
 │   ├── dg_keyqueue.c · dg_keymap.c · dg_palette.c · dg_framebuffer.c
+├── bindings/                 ← flat C ABI so OTHER languages can drive the engine
+│   └── doomgeneric_capi.{h,c} · register 6 callbacks at runtime; build a shared lib
 ├── examples/                 ← THE "IMPLEMENTATION CODE", as ports
 │   ├── null/    · zero-dependency headless port — runnable! (make run-null)
 │   ├── sdl/     · reference SDL2 port
 │   ├── template/· copy-me skeleton for a new platform
-│   └── minimal_main.c
+│   ├── minimal_main.c
+│   ├── kotlin-android/· Android (Kotlin + NDK/JNI) skeleton
+│   └── languages/· C, C++, Go, C#, Java, Python, Rust — one binding each
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← ARCHITECTURE.md · CONTRACT.md · PORTING.md
 ├── Makefile                  ← make test · make coverage · make run-null
@@ -174,6 +178,26 @@ cc -Iinclude -I<engine_dir> \
 Full walkthrough: **[docs/PORTING.md](docs/PORTING.md)**.
 
 ---
+
+## Other languages (Go, C#, Java, Kotlin, Python, Rust, ...)
+
+DOOM is C, but you can drive it from almost anything. The
+[`bindings/`](bindings/) folder adds a flat C ABI (`dg_set_callbacks`,
+`dg_create`, `dg_tick`, `dg_screen_buffer`, ...) so you build `libdoomgeneric`
+once and load it from any language's FFI. There is one worked, documented example
+per language in [`examples/languages/`](examples/languages/), plus an Android
+(Kotlin + NDK/JNI) skeleton in [`examples/kotlin-android/`](examples/kotlin-android/).
+
+| Language | FFI | Language | FFI |
+|----------|-----|----------|-----|
+| C / C++ | link + register | Java | Panama FFM (JDK 22+) |
+| Go | cgo | Python | ctypes |
+| C# | P/Invoke | Rust | `extern "C"` |
+| Kotlin/Android | NDK + JNI | | |
+
+Start with [`bindings/README.md`](bindings/README.md) (build the shared library),
+then [`examples/languages/README.md`](examples/languages/README.md) (pick a
+language).
 
 ## Documentation
 
