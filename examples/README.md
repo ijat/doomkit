@@ -9,6 +9,12 @@ particular backend. They all have the same shape; only the backend differs.
 | [`sdl/platform_sdl.c`](sdl/platform_sdl.c) | SDL2 | SDL2 | ❌ (needs SDL + engine) | A real windowed port, using the key helpers. |
 | [`template/platform_template.c`](template/platform_template.c) | yours | none | ❌ | A blank skeleton with six TODOs — copy this to start a new port. |
 | [`minimal_main.c`](minimal_main.c) | — | — | ❌ | The canonical `Create()` + `Tick()` loop on its own. |
+| [`wasm/platform_wasm.c`](wasm/) | browser (WebAssembly) | Emscripten | ✅ `make wasm` | Runs DOOM in a `<canvas>`; pick a WAD in the page. |
+| [`kotlin-android/`](kotlin-android/) | Android (Kotlin) | NDK/JNI | ❌ | Renders to a `Surface`; engine compiled into the app `.so`. |
+
+> The language-FFI examples (drive a prebuilt `libdoomgeneric` from Go, C#,
+> Java, Python, Rust, …) live one level down in
+> [`languages/`](languages/).
 
 ## Why are some not built by `make`?
 
