@@ -20,6 +20,39 @@ thing from first principles for someone who has never seen DOOM's internals.
 
 ---
 
+## Pick your platform
+
+Two ways to use doomkit, depending on where you want DOOM to run:
+
+- **Platform port** — implement the six `DG_*` callbacks in a file compiled
+  *together with* the engine (a desktop window, the browser, a phone).
+- **Language binding** — build the engine once as a shared library
+  (`make lib`) and drive it from another language over its FFI.
+
+Find your row, open that folder, follow its README.
+
+| I want to run DOOM… | Example | How it connects | Start with | Status |
+|----------------------|---------|-----------------|------------|--------|
+| **Headless / CI / to learn** | [`examples/null/`](examples/null) | zero-dependency port | `make run-null` | ✅ runs |
+| **In a desktop window** | [`examples/sdl/`](examples/sdl) | SDL2 port | `examples/sdl/` README | ◦ ref |
+| **On a brand-new platform** | [`examples/template/`](examples/template) | fill in 6 TODOs | copy the file | — skeleton |
+| **In a web browser** | [`examples/wasm/`](examples/wasm) | Emscripten → `<canvas>` | `make wasm` | ◦ ref |
+| **On Android** | [`examples/kotlin-android/`](examples/kotlin-android) | Kotlin + NDK/JNI | Android Studio | ◦ skeleton |
+| **From C / C++** | [`…/languages/c`](examples/languages/c) · [`cpp`](examples/languages/cpp) | link + register | `make lib` | ✅ verified |
+| **From Go** | [`…/languages/go`](examples/languages/go) | cgo | `make lib` | ◦ ref |
+| **From C# / .NET** | [`…/languages/csharp`](examples/languages/csharp) | P/Invoke | `make lib` | ✅ verified |
+| **From Java** | [`…/languages/java`](examples/languages/java) | Panama FFM (JDK 22+) | `make lib` | ◦ ref |
+| **From Python** | [`…/languages/python`](examples/languages/python) | ctypes | `make lib` | ✅ verified |
+| **From Rust** | [`…/languages/rust`](examples/languages/rust) | `extern "C"` | `make lib` | ✅ verified |
+| **From Node.js** | [`…/languages/nodejs`](examples/languages/nodejs) | koffi (FFI) | `make lib` | ✅ verified |
+
+**Status:** ✅ built & exercised in this repo · ◦ correct reference code, needs
+that toolchain (SDL / Emscripten / Go / JDK 22 / Android NDK) · — a starting
+skeleton. Every row except `null` needs the [upstream engine](#running-real-doom)
+and a WAD to actually *play* — they are ports/bindings, not a packaged game.
+
+---
+
 ## Why this exists
 
 The original engine mixes the genuinely reusable porting logic (a key queue, a
