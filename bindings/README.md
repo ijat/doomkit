@@ -6,7 +6,7 @@ declared in [`doomgeneric_capi.h`](doomgeneric_capi.h). This folder is that ABI.
 Build the library **once**, then point any example at it.
 
 (Android is the exception — it compiles the engine into the app's own `.so` via
-the NDK instead of loading a prebuilt one. See `examples/kotlin-android/`.)
+the NDK instead of loading a prebuilt one. See `examples/platforms/kotlin-android/`.)
 
 ## Why a registration API instead of plain `DG_*`?
 

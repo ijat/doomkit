@@ -128,7 +128,7 @@ coverage: | $(BUILD)
 # -----------------------------------------------------------------------------
 #  make run-null  -- build the zero-dependency headless port and run it.
 # -----------------------------------------------------------------------------
-NULL_SRCS = examples/null/platform_null.c \
+NULL_SRCS = examples/platforms/null/platform_null.c \
             src/dg_keyqueue.c src/dg_keymap.c src/dg_palette.c src/dg_framebuffer.c
 
 run-null: $(BUILD)/null_demo
@@ -171,7 +171,7 @@ lib: | $(LIBDIR)
 # -----------------------------------------------------------------------------
 #  make wasm  -- compile DOOM to WebAssembly for the browser example.
 #
-#  Compiles the portable engine set + examples/wasm/platform_wasm.c + the
+#  Compiles the portable engine set + examples/platforms/wasm/platform_wasm.c + the
 #  key-queue helper into one .wasm with Emscripten. Output: build/wasm/.
 #  Needs emcc (the Emscripten SDK) on PATH and the upstream engine sources.
 # -----------------------------------------------------------------------------
@@ -189,12 +189,12 @@ wasm: | $(WASMDIR)
 	  exit 1; }
 	@echo "=================== building WebAssembly from $(ENGINE) ==================="
 	$(EMCC) -O2 -w -I$(ENGINE) -Iinclude \
-	  examples/wasm/platform_wasm.c src/dg_keyqueue.c $(DG_ENGINE_SRCS) \
+	  examples/platforms/wasm/platform_wasm.c src/dg_keyqueue.c $(DG_ENGINE_SRCS) \
 	  -sINVOKE_RUN=0 -sALLOW_MEMORY_GROWTH=1 \
 	  -sEXPORTED_FUNCTIONS=_main,_wasm_push_key \
 	  -sEXPORTED_RUNTIME_METHODS=callMain,FS,HEAPU32 \
 	  -o $(WASMDIR)/doom.js
-	@cp examples/wasm/index.html $(WASMDIR)/
+	@cp examples/platforms/wasm/index.html $(WASMDIR)/
 	@echo "built $(WASMDIR)/{doom.js,doom.wasm,index.html}"
 	@echo "serve it:  (cd $(WASMDIR) && python3 -m http.server 8000)  then open http://localhost:8000/"
 

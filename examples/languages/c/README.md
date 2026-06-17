@@ -3,7 +3,7 @@
 The native case: link your program against `libdoomgeneric` and register six
 callbacks through the C API. (You *could* instead define the `DG_*` symbols
 directly and static-link the engine — that's the classic doomgeneric way, shown
-in `examples/sdl/` — but the registration API is what every other language uses,
+in `examples/platforms/sdl/` — but the registration API is what every other language uses,
 so we use it here too for consistency.)
 
 ## What you need

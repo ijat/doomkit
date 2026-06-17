@@ -25,7 +25,7 @@ pixels came out. Only the FFI mechanism differs.
 | Python | ctypes (stdlib) | [`python/`](python) | shortest binding |
 | Rust | `extern "C"` | [`rust/`](rust) | no crates needed |
 | Node.js | koffi (FFI) | [`nodejs/`](nodejs) | `npm install`, no native build |
-| Kotlin/Android | NDK + JNI | [`../kotlin-android/`](../kotlin-android) | engine compiled into the app `.so` |
+| Kotlin/Android | NDK + JNI | [`../platforms/kotlin-android/`](../platforms/kotlin-android) | engine compiled into the app `.so` |
 
 ## The shared shape, in pseudocode
 
