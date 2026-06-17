@@ -1,0 +1,11 @@
+[package]
+name = "doomdemo"
+version = "0.1.0"
+edition = "2021"
+
+# No dependencies: Rust's FFI is built in.
+[dependencies]
+
+[[bin]]
+name = "doomdemo"
+path = "src/main.rs"
