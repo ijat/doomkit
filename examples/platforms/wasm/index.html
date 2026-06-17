@@ -29,7 +29,7 @@
     <span id="status">waiting for WAD…</span>
   </div>
   <canvas id="screen" width="640" height="400" tabindex="0"></canvas>
-  <p>Arrows move · Ctrl fire · Space use · Enter/Esc menus. Sound is disabled in this demo.</p>
+  <p>Arrows move · <b>Z</b> fire · <b>Space</b> use · Shift run · Alt strafe · 1–9 weapons · Enter/Esc menus. Sound is disabled in this demo.</p>
 
 <script>
   // --- canvas drawing -------------------------------------------------------
@@ -65,23 +65,31 @@
   };
 
   // --- keyboard: browser key -> DOOM key code (see include/doomkit/dg_keys.h) -
+  // NOTE: we deliberately do NOT bind fire to Ctrl. On macOS, Ctrl+Arrow is a
+  // system Mission Control shortcut that the OS intercepts before the browser,
+  // so preventDefault() can't stop it — holding Ctrl to fire while moving with
+  // the arrows would switch desktops. Fire is Z instead.
   function toDoomKey(e) {
-    switch (e.key) {
+    // Normalise single characters so Shift (run) doesn't change e.g. 'z'->'Z'.
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    switch (key) {
       case 'ArrowLeft':  return 0xac;
       case 'ArrowRight': return 0xae;
       case 'ArrowUp':    return 0xad;
       case 'ArrowDown':  return 0xaf;
-      case 'Control':    return 0xa3; // fire
-      case ' ':          return 0xa2; // use
+      case 'z':          return 0xa3;        // fire
+      case ' ':          return 0xa2;        // use / open
+      case 'x':          return 0xa2;        // use / open (alternative)
       case 'Enter':      return 13;
       case 'Escape':     return 27;
-      case 'Tab':        return 9;
-      case 'Shift':      return 0x80 + 0x36; // run
-      case 'Alt':        return 0x80 + 0x38; // strafe
+      case 'Tab':        return 9;           // automap
+      case 'Shift':      return 0x80 + 0x36; // run (hold)
+      case 'Alt':        return 0x80 + 0x38; // strafe (hold)
       case 'Backspace':  return 0x7f;
     }
-    // Any single printable character -> its (lower-case) ASCII code.
-    if (e.key.length === 1) return e.key.toLowerCase().charCodeAt(0);
+    // Any other single printable character -> its ASCII code (1-9 = weapons,
+    // y/n for menu prompts, etc.).
+    if (key.length === 1) return key.charCodeAt(0);
     return 0;
   }
   function sendKey(e, pressed) {

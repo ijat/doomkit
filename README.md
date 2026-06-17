@@ -1,5 +1,8 @@
 # doomkit
 
+[![CI](https://github.com/ijat/doomkit/actions/workflows/ci.yml/badge.svg)](https://github.com/ijat/doomkit/actions/workflows/ci.yml)
+[![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](LICENSE)
+
 A **clean, fully-documented, fully-tested reference of the DOOM porting layer** —
 the small, elegant idea hiding inside [doomgeneric](https://github.com/ozkl/doomgeneric):
 you can run all of DOOM on a new platform by implementing just **six functions**.
