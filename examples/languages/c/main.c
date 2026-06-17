@@ -1,7 +1,7 @@
 /* =============================================================================
  *  examples/languages/c/main.c
  * -----------------------------------------------------------------------------
- *  Drive the genericdoom SHARED LIBRARY from plain C, using the registration
+ *  Drive the doomkit SHARED LIBRARY from plain C, using the registration
  *  C API (bindings/doomgeneric_capi.h). GPLv2. See LICENSE.
  * =============================================================================
  *

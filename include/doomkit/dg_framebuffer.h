@@ -32,8 +32,8 @@
  *  walking a `unsigned char *` needs, and it keeps the per-pixel size explicit.
  * ===========================================================================*/
 
-#ifndef GENERICDOOM_DG_FRAMEBUFFER_H
-#define GENERICDOOM_DG_FRAMEBUFFER_H
+#ifndef DOOMKIT_DG_FRAMEBUFFER_H
+#define DOOMKIT_DG_FRAMEBUFFER_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,4 +82,4 @@ void dg_fb_layout(int fb_w, int fb_h, int screen_w, int screen_h,
 }
 #endif
 
-#endif /* GENERICDOOM_DG_FRAMEBUFFER_H */
+#endif /* DOOMKIT_DG_FRAMEBUFFER_H */

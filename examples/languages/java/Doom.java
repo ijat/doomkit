@@ -1,7 +1,7 @@
 // =============================================================================
 //  examples/languages/java/Doom.java
 // -----------------------------------------------------------------------------
-//  Drive the genericdoom shared library from PURE Java using the Foreign
+//  Drive the doomkit shared library from PURE Java using the Foreign
 //  Function & Memory API (Project Panama). No JNI, no C glue. Java 22+.
 //  GPLv2. See LICENSE.
 // =============================================================================

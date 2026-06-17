@@ -1,5 +1,5 @@
 /* =============================================================================
- *  genericdoom.h  --  The DOOM porting contract.
+ *  doomkit.h  --  The DOOM porting contract.
  * -----------------------------------------------------------------------------
  *  Derived from doomgeneric (https://github.com/ozkl/doomgeneric), which is
  *  itself a thin shim over id Software's DOOM engine.
@@ -31,8 +31,8 @@
  *  docs/PORTING.md for a step-by-step walkthrough.
  * ===========================================================================*/
 
-#ifndef GENERICDOOM_H
-#define GENERICDOOM_H
+#ifndef DOOMKIT_H
+#define DOOMKIT_H
 
 #include <stdint.h>
 
@@ -191,4 +191,4 @@ void DG_SetWindowTitle(const char *title);
 }
 #endif
 
-#endif /* GENERICDOOM_H */
+#endif /* DOOMKIT_H */

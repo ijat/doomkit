@@ -25,9 +25,9 @@
  *  doomgeneric. See docs/PORTING.md.
  * ===========================================================================*/
 
-#include "genericdoom/genericdoom.h"
-#include "genericdoom/dg_keyqueue.h"
-#include "genericdoom/dg_keymap.h"
+#include "doomkit/doomkit.h"
+#include "doomkit/dg_keyqueue.h"
+#include "doomkit/dg_keymap.h"
 
 #include <SDL.h>
 #include <stdio.h>

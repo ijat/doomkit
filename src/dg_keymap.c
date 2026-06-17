@@ -1,12 +1,12 @@
 /* =============================================================================
  *  dg_keymap.c  --  SDL key symbol  ->  DOOM key code.
- *  See include/genericdoom/dg_keymap.h for the rationale.
+ *  See include/doomkit/dg_keymap.h for the rationale.
  *  Derived from convertToDoomKey() in doomgeneric_sdl.c.
  *  GNU General Public License v2. See LICENSE.
  * ===========================================================================*/
 
-#include "genericdoom/dg_keymap.h"
-#include "genericdoom/dg_keys.h"
+#include "doomkit/dg_keymap.h"
+#include "doomkit/dg_keys.h"
 
 /* -----------------------------------------------------------------------------
  *  We deliberately do NOT #include <SDL.h> here. Depending on SDL would mean

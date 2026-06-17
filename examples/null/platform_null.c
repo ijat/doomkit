@@ -6,7 +6,7 @@
  *
  *  WHAT THIS IS (AND ISN'T)
  *  ------------------------
- *  This file does two jobs at once so that the whole genericdoom contract can
+ *  This file does two jobs at once so that the whole doomkit contract can
  *  be demonstrated and run with nothing but a C compiler:
  *
  *    1. It is a *port*: it implements the six DG_* callbacks exactly as a real
@@ -26,11 +26,11 @@
  *  from main(). See examples/template/platform_template.c for that skeleton.
  * ===========================================================================*/
 
-#include "genericdoom/genericdoom.h"
-#include "genericdoom/dg_keyqueue.h"
-#include "genericdoom/dg_keymap.h"
-#include "genericdoom/dg_palette.h"
-#include "genericdoom/dg_framebuffer.h"
+#include "doomkit/doomkit.h"
+#include "doomkit/dg_keyqueue.h"
+#include "doomkit/dg_keymap.h"
+#include "doomkit/dg_palette.h"
+#include "doomkit/dg_framebuffer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -204,7 +204,7 @@ int main(void)
     if (!DG_ScreenBuffer) { fprintf(stderr, "out of memory\n"); return 1; }
 
     DG_Init();                       /* would be called by doomgeneric_Create */
-    DG_SetWindowTitle("genericdoom-cleancode null demo");
+    DG_SetWindowTitle("doomkit null demo");
 
     dg_palette_t pal;
     build_palette(&pal);

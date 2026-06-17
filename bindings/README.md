@@ -10,7 +10,7 @@ the NDK instead of loading a prebuilt one. See `examples/kotlin-android/`.)
 
 ## Why a registration API instead of plain `DG_*`?
 
-The base genericdoom contract wants the platform to *define* six link-time
+The base doomkit contract wants the platform to *define* six link-time
 symbols (`DG_Init`, ...). Managed languages (C#, Java, ...) cannot define raw C
 symbols. So this shim **inverts** the wiring: you *register* six function
 pointers at runtime with `dg_set_callbacks()`, and the shim provides the real

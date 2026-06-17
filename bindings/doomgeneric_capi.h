@@ -6,7 +6,7 @@
  *
  *  WHY THIS LAYER EXISTS
  *  ---------------------
- *  The plain genericdoom contract expects the platform to *define* six symbols
+ *  The plain doomkit contract expects the platform to *define* six symbols
  *  (DG_Init, DG_DrawFrame, ...). That is perfect when you compile your platform
  *  code together with the engine in one C/C++ build. But it does NOT work when
  *  you want to drive the engine from Go, C#, Java, Kotlin, Python, Rust, ...
@@ -54,7 +54,7 @@ extern "C" {
 #endif
 
 /* ---- The six callback signatures, as function-pointer types --------------- *
- *  These mirror the genericdoom contract exactly (see genericdoom.h):
+ *  These mirror the doomkit contract exactly (see doomkit.h):
  *    init             -- open display + input
  *    draw_frame       -- present the framebuffer, pump OS events
  *    sleep_ms         -- block for ms milliseconds

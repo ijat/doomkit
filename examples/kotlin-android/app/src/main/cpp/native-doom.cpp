@@ -1,5 +1,5 @@
 // =============================================================================
-//  native-doom.cpp  --  JNI bridge that runs genericdoom on Android.
+//  native-doom.cpp  --  JNI bridge that runs doomkit on Android.
 // -----------------------------------------------------------------------------
 //  GPLv2. See LICENSE.
 // =============================================================================
@@ -29,7 +29,7 @@
 
 extern "C" {
 #include "doomgeneric.h"                 // engine: DG_ScreenBuffer, RESX/Y, Create/Tick
-#include "genericdoom/dg_keyqueue.h"      // our reusable input ring buffer
+#include "doomkit/dg_keyqueue.h"      // our reusable input ring buffer
 }
 
 #define LOG(...) __android_log_print(ANDROID_LOG_INFO, "doom", __VA_ARGS__)
@@ -43,7 +43,7 @@ static uint32_t now_ms() {
     return (uint32_t)(ts.tv_sec * 1000u + ts.tv_nsec / 1000000u);
 }
 
-// ---- the six genericdoom callbacks, implemented for Android ----------------
+// ---- the six doomkit callbacks, implemented for Android ----------------
 extern "C" {
 
 void DG_Init(void) {

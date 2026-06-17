@@ -4,8 +4,8 @@
  * ===========================================================================*/
 
 #include "unity.h"
-#include "genericdoom/dg_keyqueue.h"
-#include "genericdoom/dg_keys.h"
+#include "doomkit/dg_keyqueue.h"
+#include "doomkit/dg_keys.h"
 
 /* Unity calls these around every test; we need no shared fixture. */
 void setUp(void) {}

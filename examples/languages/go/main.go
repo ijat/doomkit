@@ -1,7 +1,7 @@
 // =============================================================================
 //  examples/languages/go/main.go
 // -----------------------------------------------------------------------------
-//  Drive the genericdoom shared library from Go using cgo (Go's built-in FFI).
+//  Drive the doomkit shared library from Go using cgo (Go's built-in FFI).
 //  GPLv2. See LICENSE.
 // =============================================================================
 //

@@ -1,5 +1,5 @@
 # =============================================================================
-#  genericdoom-cleancode -- Makefile
+#  doomkit -- Makefile
 # -----------------------------------------------------------------------------
 #  Common targets:
 #    make test       Build and run every Unity test suite (the default).

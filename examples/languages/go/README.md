@@ -1,4 +1,4 @@
-# Run genericdoom from Go (cgo)
+# Run doomkit from Go (cgo)
 
 Go's built-in FFI is **cgo**. The interesting part here is that C must call *back*
 into Go for the six callbacks — cgo supports that via `//export`.

@@ -8,8 +8,8 @@
  * ===========================================================================*/
 
 #include "unity.h"
-#include "genericdoom/dg_keymap.h"
-#include "genericdoom/dg_keys.h"
+#include "doomkit/dg_keymap.h"
+#include "doomkit/dg_keys.h"
 
 void setUp(void) {}
 void tearDown(void) {}

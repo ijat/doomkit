@@ -1,4 +1,4 @@
-# Run genericdoom from Python (ctypes)
+# Run doomkit from Python (ctypes)
 
 Python's standard-library FFI is **ctypes** — no `pip install` needed. The whole
 binding is one short file.

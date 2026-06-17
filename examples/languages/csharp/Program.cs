@@ -1,7 +1,7 @@
 // =============================================================================
 //  examples/languages/csharp/Program.cs
 // -----------------------------------------------------------------------------
-//  Drive the genericdoom shared library from C# using P/Invoke (the built-in
+//  Drive the doomkit shared library from C# using P/Invoke (the built-in
 //  .NET interop). GPLv2. See LICENSE.
 // =============================================================================
 //

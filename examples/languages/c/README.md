@@ -1,4 +1,4 @@
-# Run genericdoom from C
+# Run doomkit from C
 
 The native case: link your program against `libdoomgeneric` and register six
 callbacks through the C API. (You *could* instead define the `DG_*` symbols

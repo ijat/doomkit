@@ -1,4 +1,4 @@
-# genericdoom-cleancode
+# doomkit
 
 A **clean, fully-documented, fully-tested reference of the DOOM porting layer** —
 the small, elegant idea hiding inside [doomgeneric](https://github.com/ozkl/doomgeneric):
@@ -10,7 +10,7 @@ relocates the platform implementations into `examples/`, and documents the whole
 thing from first principles for someone who has never seen DOOM's internals.
 
 > **What this is:** a teaching-quality, test-backed *reference + scaffold* for the
-> genericdoom porting interface, plus an architecture map of the engine.
+> doomkit porting interface, plus an architecture map of the engine.
 >
 > **What this is NOT:** a fork of the DOOM engine. The ~73,000-line engine is
 > battle-tested GPL code from 1993; rewriting it would add bugs and value to no
@@ -34,9 +34,9 @@ correct with tests.
 ## At a glance
 
 ```
-genericdoom-cleancode/
-├── include/genericdoom/      ← THE CONTRACT (read genericdoom.h first)
-│   ├── genericdoom.h         · the six callbacks + lifecycle + framebuffer
+doomkit/
+├── include/doomkit/      ← THE CONTRACT (read doomkit.h first)
+│   ├── doomkit.h         · the six callbacks + lifecycle + framebuffer
 │   ├── dg_keys.h             · DOOM key codes, explained
 │   ├── dg_keyqueue.h         · input ring-buffer API
 │   ├── dg_keymap.h           · host-key → DOOM-key API
@@ -89,7 +89,7 @@ make run-null  →  translates keys, centres a 320×200 image into 640×400, wri
 Implement these six functions for your platform and DOOM runs:
 
 ```c
-#include "genericdoom/genericdoom.h"
+#include "doomkit/doomkit.h"
 
 void     DG_Init(void);                                   // open display + input
 void     DG_DrawFrame(void);                              // blit DG_ScreenBuffer
@@ -204,7 +204,7 @@ language).
 
 | Doc | Read it for |
 |-----|-------------|
-| [`include/genericdoom/genericdoom.h`](include/genericdoom/genericdoom.h) | the contract itself, with the "power socket" mental model |
+| [`include/doomkit/doomkit.h`](include/doomkit/doomkit.h) | the contract itself, with the "power socket" mental model |
 | [`docs/PORTING.md`](docs/PORTING.md) | beginner, step-by-step: port DOOM in six functions |
 | [`docs/CONTRACT.md`](docs/CONTRACT.md) | precise semantics, threading, timing of every callback |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the engine map: data flow of a frame + subsystem inventory |

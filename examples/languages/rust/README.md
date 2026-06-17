@@ -1,4 +1,4 @@
-# Run genericdoom from Rust
+# Run doomkit from Rust
 
 Rust's FFI is built into the language — no crates needed. You declare the C
 functions in an `extern "C"` block, write the callbacks as `extern "C" fn`, and

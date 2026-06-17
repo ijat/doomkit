@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *  Copyright (C) 1993-1996 id Software, Inc.
  *  Copyright (C) 2005-2014 Simon Howard.
- *  Cleaned/commented for genericdoom-cleancode.
+ *  Cleaned/commented for doomkit.
  *  GNU General Public License v2. See LICENSE.
  * =============================================================================
  *
@@ -28,8 +28,8 @@
  *  around by name.
  * ===========================================================================*/
 
-#ifndef GENERICDOOM_DG_KEYS_H
-#define GENERICDOOM_DG_KEYS_H
+#ifndef DOOMKIT_DG_KEYS_H
+#define DOOMKIT_DG_KEYS_H
 
 /* --- Movement and the two core actions ----------------------------------- */
 #define KEY_RIGHTARROW  0xae
@@ -109,4 +109,4 @@
 #define KEYP_EQUALS     KEY_EQUALS
 #define KEYP_ENTER      KEY_ENTER
 
-#endif /* GENERICDOOM_DG_KEYS_H */
+#endif /* DOOMKIT_DG_KEYS_H */

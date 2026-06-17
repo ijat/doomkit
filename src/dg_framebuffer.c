@@ -1,11 +1,11 @@
 /* =============================================================================
  *  dg_framebuffer.c  --  Centering / scaling offset math.
- *  See include/genericdoom/dg_framebuffer.h for the diagram and rationale.
+ *  See include/doomkit/dg_framebuffer.h for the diagram and rationale.
  *  Derived from the offset calculation in I_FinishUpdate() in i_video.c.
  *  GNU General Public License v2. See LICENSE.
  * ===========================================================================*/
 
-#include "genericdoom/dg_framebuffer.h"
+#include "doomkit/dg_framebuffer.h"
 
 void dg_fb_layout(int fb_w, int fb_h, int screen_w, int screen_h,
                   int bpp, int scaling, dg_fb_layout_t *out)

@@ -36,8 +36,8 @@
  *  is far more than a single frame ever needs, so in practice it never fills.
  * ===========================================================================*/
 
-#ifndef GENERICDOOM_DG_KEYQUEUE_H
-#define GENERICDOOM_DG_KEYQUEUE_H
+#ifndef DOOMKIT_DG_KEYQUEUE_H
+#define DOOMKIT_DG_KEYQUEUE_H
 
 #include <stdint.h>
 
@@ -104,4 +104,4 @@ int dg_keyqueue_pop(dg_keyqueue_t *q, int *pressed, unsigned char *doomKey);
 }
 #endif
 
-#endif /* GENERICDOOM_DG_KEYQUEUE_H */
+#endif /* DOOMKIT_DG_KEYQUEUE_H */
