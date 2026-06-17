@@ -7,7 +7,26 @@ knowledge required.
 > Prerequisite mental model: read the top of
 > [`include/doomkit/doomkit.h`](../include/doomkit/doomkit.h)
 > (the power-socket analogy) and skim [`CONTRACT.md`](CONTRACT.md). That's all
-> the theory you need.
+> the theory you need. Hit an unfamiliar word? See [`GLOSSARY.md`](GLOSSARY.md).
+
+---
+
+## Prerequisites — what to install
+
+Every port needs a **C compiler** and **make**. Then add whatever your *target*
+requires. You don't need all of these — only the row you're building.
+
+| You're building… | Install | Quick check |
+|------------------|---------|-------------|
+| Anything (the base) | a C compiler + `make` — macOS: `xcode-select --install`; Debian/Ubuntu: `sudo apt install build-essential`; Windows: MSYS2/MinGW or WSL | `cc --version && make --version` |
+| The SDL desktop port | SDL2 dev libs — macOS: `brew install sdl2`; Debian/Ubuntu: `sudo apt install libsdl2-dev` | `sdl2-config --version` |
+| The browser (wasm) port | the Emscripten SDK | `emcc --version` |
+| A language binding | that language's toolchain (Go, .NET, JDK **22+**, Python 3, Rust/Cargo, Node.js) | e.g. `go version`, `python3 --version` |
+| The Android port | Android Studio + the NDK | open the project in Android Studio |
+
+You also always need the **engine sources** and a **WAD** (next step) for any
+build that actually plays DOOM — but *not* for `make test` or `make run-null`,
+which run with only the base compiler.
 
 ---
 
@@ -21,7 +40,9 @@ You need three things in one build:
    This package does not ship them (they are unchanged GPL code). Get them from
    <https://github.com/ozkl/doomgeneric> and put their `doomgeneric/` folder
    where your build can see it.
-3. **A WAD file** — the game data. The free shareware `doom1.wad` works.
+3. **A WAD file** — the game data. The free, redistributable **Freedoom** IWAD
+   or the shareware `doom1.wad` both work. Where to get one (legally) and how to
+   point the engine at it: **[WAD.md](WAD.md)**.
 
 ---
 
