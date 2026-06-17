@@ -7,7 +7,8 @@ package ships neither. This page is the beginner's guide to the WAD half: what i
 is, where to get one **legally**, and how to point the engine at it.
 
 > The headless `make run-null` demo needs **no WAD** — it uses a fake engine and
-> a generated test image. You only need a WAD once you link the real engine
+> a generated test image. You only need a WAD once you link the real engine — for
+> example the headless `make run-null-engine WAD=...` demo, or any real port
 > (see [PORTING.md](PORTING.md) and [Running real DOOM](../README.md#running-real-doom)).
 
 ---
