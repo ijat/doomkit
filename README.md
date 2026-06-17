@@ -20,6 +20,12 @@ thing from first principles for someone who has never seen DOOM's internals.
 > one. To run *real* DOOM you drop the upstream engine in behind this interface
 > (see [Running real DOOM](#running-real-doom)). Everything here is the seam, not
 > the engine.
+>
+> **No sound (by design).** doomkit covers the six video/input/timing callbacks;
+> it does **not** provide audio. DOOM's sound is engine-internal, not part of the
+> porting seam, so it sits outside doomkit's scope. If your platform has SDL or an
+> OS audio API you can switch on the engine's own backend — see
+> [docs/SOUND.md](docs/SOUND.md) for why, and how.
 
 ---
 
@@ -254,6 +260,7 @@ WAD in the page. See [`examples/platforms/wasm/`](examples/platforms/wasm/).
 | [`docs/PORTING.md`](docs/PORTING.md) | beginner, step-by-step: port DOOM in six functions |
 | [`docs/CONTRACT.md`](docs/CONTRACT.md) | precise semantics, threading, timing of every callback |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the engine map: data flow of a frame + subsystem inventory |
+| [`docs/SOUND.md`](docs/SOUND.md) | why sound is not in the porting seam, and how to enable the engine's own audio |
 | [`examples/README.md`](examples/README.md) | what each example demonstrates |
 
 ---
