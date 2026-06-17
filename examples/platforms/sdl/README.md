@@ -18,17 +18,21 @@ This port uses the *classic* doomgeneric style: it defines the `DG_*` symbols
 directly and is compiled together with the engine (no shared library).
 
 ```sh
-cc -Iinclude $(sdl2-config --cflags) \
+ENGINE=<engine_dir>   # path to doomgeneric's inner folder (the one with d_main.c)
+
+cc -I$ENGINE -Iinclude $(sdl2-config --cflags) \
    examples/platforms/sdl/platform_sdl.c \
    src/dg_keyqueue.c src/dg_keymap.c \
-   <engine_dir>/*.c \
+   $(ls $ENGINE/*.c | grep -v 'doomgeneric_') \
    $(sdl2-config --libs) -o doom
 
 ./doom -iwad /path/to/doom1.wad
 ```
 
-(Drop the upstream engine `.c` files in for `<engine_dir>/*.c`; they provide
-`doomgeneric_Create()` / `doomgeneric_Tick()`.)
+The `grep -v 'doomgeneric_'` filter is required: a bare `*.c` glob would pull in
+`doomgeneric_allegro.c`, `doomgeneric_xlib.c`, and other platform backends that
+define conflicting `DG_*` symbols and require unrelated libraries. Only
+`platform_sdl.c` (this file) should provide those symbols.
 
 There is no `make` target for this one because it needs SDL2 **and** the engine
 to produce a playable binary.
