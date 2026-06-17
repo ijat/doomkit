@@ -9,6 +9,10 @@ recipe is the same everywhere:
 2. **Load it from your language** and register six callbacks.
 3. **Loop**: `dg_create(argc, argv)` once, then `dg_tick()` repeatedly.
 
+`dg_create` loads the game data, so pass a WAD via `argv` (`-iwad <file>`) just
+like the native ports — see [`../../docs/WAD.md`](../../docs/WAD.md) for where to
+get one.
+
 Every example here is the *same* tiny headless program — it boots the engine,
 runs ~200 frames, and writes `frame.ppm` at frame 100 so you can confirm real
 pixels came out. Only the FFI mechanism differs. (The one exception is

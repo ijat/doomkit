@@ -13,9 +13,11 @@ From the project root:
 make run-null
 ```
 
-That builds and runs `platform_null.c` and writes `build/frame.ppm` (open it in
-any image viewer — you'll see a centred colour-XOR test image). **No compiler
-flags, no libraries, no WAD, no engine** required.
+That builds and runs `platform_null.c` and writes `build/frame.ppm` — a
+[PPM image](../../../docs/GLOSSARY.md#ppm). Open it in any image viewer to see a
+centred colour-XOR test pattern; if your viewer won't open `.ppm`, convert it
+with `magick build/frame.ppm out.png` (ImageMagick) or open it in GIMP. **No
+compiler flags, no libraries, no WAD, no engine** required.
 
 ## Why it works with no engine
 

@@ -10,7 +10,8 @@ the backend differs.
 1. **SDL2** installed (`brew install sdl2`, `apt install libsdl2-dev`, …).
 2. **The upstream DOOM engine sources** (this package doesn't vendor them) — see
    the root [README](../../../README.md#running-real-doom).
-3. **A WAD** (the free shareware `doom1.wad` works).
+3. **A WAD** (free **Freedoom** or the shareware `doom1.wad`) —
+   [how to get one](../../../docs/WAD.md).
 
 ## Build & run
 

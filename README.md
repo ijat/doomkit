@@ -63,6 +63,40 @@ and a WAD to actually *play* — they are ports/bindings, not a packaged game.
 
 ---
 
+## But can it run on my ______?
+
+Probably. Yes. Almost certainly yes.
+
+DOOM has a near-religious tradition of being ported to anything with a CPU and a
+pulse — calculators, pregnancy tests, ATMs, treadmills, a literal potato (okay,
+that one had help). doomkit exists to make *you* the next person in that meme.
+
+The bar is hilariously low: **if your thing can compile C, it can run DOOM.**
+
+- 🧊 **Your fridge?** If it has a smart panel, it has a CPU. Rip and tear between
+  grocery reminders.
+- 🍞 **Your toaster?** Add a microcontroller and you've got DOOM at 35 tics per
+  slice.
+- 🔋 **Your powerbank?** The fancy ones have screens *and* a chip now. No excuse.
+- 📟 **That weird industrial gadget at work?** Don't. (But you could.)
+
+**"But it doesn't even have a screen!"** *Glorious.* DOOM doesn't care. The
+[`null` port](examples/platforms/null) runs the entire engine and writes the
+frame to a file — no display, no window, no GPU, nothing. Your screenless gizmo
+is busy fragging demons in the dark; it just can't brag about it. Pipe those
+pixels to an OLED, an LED matrix, a thermal printer, a row of servo-driven flip
+dots — whatever you've got. Six functions stand between your hardware and
+eternal internet glory.
+
+So: stop reading, pick a victim from your junk drawer, and
+[port DOOM to it](docs/PORTING.md). The world needs to know your smart kettle
+can survive Hell.
+
+> Legal-but-fun footnote: you still need the game data (a WAD). Use the free,
+> redistributable [Freedoom](docs/WAD.md) so your toaster ships *legally*.
+
+---
+
 ## Why this exists
 
 The original engine mixes the genuinely reusable porting logic (a key queue, a
@@ -100,7 +134,7 @@ doomkit/
 │   │   └── c · cpp · go · csharp · csharp-avalonia (windowed) · java · python · rust · nodejs
 │   └── minimal_main.c · the canonical Create()/Tick() loop
 ├── tests/                    ← Unity test suites (+ vendored Unity)
-├── docs/                     ← ARCHITECTURE.md · CONTRACT.md · PORTING.md
+├── docs/                     ← PORTING.md · CONTRACT.md · ARCHITECTURE.md · WAD.md · SOUND.md · GLOSSARY.md
 ├── Makefile                  ← make test · coverage · run-null · lib · wasm
 ├── LICENSE · NOTICE.md       ← GPLv2 (+ Unity MIT) and attribution
 ```
@@ -118,6 +152,7 @@ make coverage
 
 # 3. Build & run the dependency-free demo; it writes build/frame.ppm
 make run-null
+# open build/frame.ppm in any image viewer (or: magick build/frame.ppm out.png)
 ```
 
 Verified on this machine:
@@ -210,7 +245,8 @@ This package is the interface, not the engine. To get a playable build:
 1. Get the upstream engine sources from <https://github.com/ozkl/doomgeneric>
    (the `doomgeneric/` folder of `.c`/`.h` files). They provide
    `doomgeneric_Create()` / `doomgeneric_Tick()` and the entire game.
-2. Get a WAD (the free `doom1.wad` is fine).
+2. Get a WAD — the free, redistributable **Freedoom** or the shareware
+   `doom1.wad`. Where to get one legally and how to use it: [docs/WAD.md](docs/WAD.md).
 3. Compile your platform file + this package's `src/` + the engine, then run:
 
 ```sh
@@ -261,6 +297,8 @@ WAD in the page. See [`examples/platforms/wasm/`](examples/platforms/wasm/).
 | [`docs/CONTRACT.md`](docs/CONTRACT.md) | precise semantics, threading, timing of every callback |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the engine map: data flow of a frame + subsystem inventory |
 | [`docs/SOUND.md`](docs/SOUND.md) | why sound is not in the porting seam, and how to enable the engine's own audio |
+| [`docs/WAD.md`](docs/WAD.md) | where to get the game data (WAD) legally, and how to point the engine at it |
+| [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | plain-English definitions of every term used in these docs |
 | [`examples/README.md`](examples/README.md) | what each example demonstrates |
 
 ---
