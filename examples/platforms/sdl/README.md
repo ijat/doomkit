@@ -23,16 +23,21 @@ ENGINE=<engine_dir>   # path to doomgeneric's inner folder (the one with d_main.
 cc -I$ENGINE -Iinclude $(sdl2-config --cflags) \
    examples/platforms/sdl/platform_sdl.c \
    src/dg_keyqueue.c src/dg_keymap.c \
-   $(ls $ENGINE/*.c | grep -v 'doomgeneric_') \
+   $(ls $ENGINE/*.c | grep -vE '(doomgeneric_|i_allegro|i_sdlsound|i_sdlmusic|gusconf|mus2mid|icon)') \
    $(sdl2-config --libs) -o doom
 
 ./doom -iwad /path/to/doom1.wad
 ```
 
-The `grep -v 'doomgeneric_'` filter is required: a bare `*.c` glob would pull in
-`doomgeneric_allegro.c`, `doomgeneric_xlib.c`, and other platform backends that
-define conflicting `DG_*` symbols and require unrelated libraries. Only
-`platform_sdl.c` (this file) should provide those symbols.
+A bare `*.c` glob pulls in files that conflict or need extra libraries. Two
+categories must be excluded:
+
+- **Platform backends** (`doomgeneric_allegro.c`, `doomgeneric_xlib.c`, …) —
+  each defines the `DG_*` symbols; only `platform_sdl.c` should provide them.
+- **Sound/driver stubs** (`i_allegrosound.c`, `i_allegromusic.c`,
+  `i_sdlsound.c`, `i_sdlmusic.c`, `gusconf.c`, `mus2mid.c`, `icon.c`) —
+  require Allegro, SDL_mixer, or platform headers not needed for a no-sound
+  build.
 
 There is no `make` target for this one because it needs SDL2 **and** the engine
 to produce a playable binary.
