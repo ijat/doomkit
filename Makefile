@@ -7,9 +7,13 @@
 #                    per-file report. Target is 100% for everything in src/.
 #    make run-null   Build and run the dependency-free "null" example, which
 #                    drives the helper modules end-to-end and writes frame.ppm.
+#    make lib        Build the shared libdoomgeneric the language bindings load.
+#                    Needs the upstream engine sources:
+#                      make lib ENGINE=/path/to/doomgeneric/doomgeneric
 #    make clean      Remove all build output.
 #
-#  Everything here needs only a C compiler and make -- no external libraries.
+#  test/coverage/run-null need only a C compiler. `lib` additionally needs the
+#  upstream DOOM engine sources (this package does not vendor them).
 # =============================================================================
 
 CC      ?= cc
@@ -27,7 +31,44 @@ SUITES   = keyqueue keymap palette framebuffer
 # Convenience: the test binaries we will produce.
 TEST_BINS = $(addprefix $(BUILD)/test_,$(SUITES))
 
-.PHONY: all test coverage run-null clean
+# ---- shared-library build (make lib) ---------------------------------------
+# Path to the upstream DOOM engine sources (the folder with d_main.c, i_video.c,
+# ...). Override on the command line: make lib ENGINE=/path/to/doomgeneric/doomgeneric
+ENGINE  ?= ../doomgeneric/doomgeneric
+LIBDIR   = $(BUILD)/lib
+
+# Pick the shared-object extension and link flag per OS.
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  LIBNAME = libdoomgeneric.dylib
+  LIBFLAG = -dynamiclib
+else
+  LIBNAME = libdoomgeneric.so
+  LIBFLAG = -shared
+endif
+
+# Flags for engine/shim objects: position-independent, hidden symbols (only the
+# DG_API exports are visible), warnings off (1993 code), engine + shim headers.
+LIB_CFLAGS = -fPIC -fvisibility=hidden -w -I$(ENGINE) -Ibindings
+
+# The portable engine source set: the upstream Makefile's SRC_DOOM list MINUS
+# doomgeneric_xlib (and all other doomgeneric_*.c platform files) -- our shim
+# provides the DG_* symbols instead. A naive *.c glob would wrongly pull in
+# SDL/Allegro/GUS-only files (i_sdlsound.c, gusconf.c, mus2mid.c, icon.c, ...),
+# so we list the verified set explicitly.
+DG_ENGINE_NAMES = dummy am_map doomdef doomstat dstrings d_event d_items d_iwad \
+  d_loop d_main d_mode d_net f_finale f_wipe g_game hu_lib hu_stuff info i_cdmus \
+  i_endoom i_joystick i_scale i_sound i_system i_timer memio m_argv m_bbox m_cheat \
+  m_config m_controls m_fixed m_menu m_misc m_random p_ceilng p_doors p_enemy \
+  p_floor p_inter p_lights p_map p_maputl p_mobj p_plats p_pspr p_saveg p_setup \
+  p_sight p_spec p_switch p_telept p_tick p_user r_bsp r_data r_draw r_main \
+  r_plane r_segs r_sky r_things sha1 sounds statdump st_lib st_stuff s_sound \
+  tables v_video wi_stuff w_checksum w_file w_main w_wad z_zone w_file_stdc \
+  i_input i_video doomgeneric
+
+LIB_OBJS = $(addprefix $(LIBDIR)/,$(addsuffix .o,$(DG_ENGINE_NAMES))) $(LIBDIR)/capi.o
+
+.PHONY: all test coverage run-null lib clean
 all: test
 
 # -----------------------------------------------------------------------------
@@ -87,6 +128,35 @@ run-null: $(BUILD)/null_demo
 
 $(BUILD)/null_demo: $(NULL_SRCS) | $(BUILD)
 	$(CC) $(CFLAGS) $(NULL_SRCS) -o $@
+
+# -----------------------------------------------------------------------------
+#  make lib  -- build libdoomgeneric (engine + C-ABI shim) for the bindings.
+#
+#  Compiles the verified portable engine set + bindings/doomgeneric_capi.c into
+#  a shared library the language examples load. The shim provides the DG_*
+#  symbols, so no platform file (doomgeneric_*.c) is included.
+# -----------------------------------------------------------------------------
+$(LIBDIR):
+	@mkdir -p $(LIBDIR)
+
+lib: | $(LIBDIR)
+	@test -f "$(ENGINE)/doomgeneric.h" || { \
+	  echo "ERROR: DOOM engine sources not found at ENGINE=$(ENGINE)"; \
+	  echo "  This package does not vendor the engine. Point ENGINE at upstream"; \
+	  echo "  doomgeneric's 'doomgeneric/' folder (the one with d_main.c), e.g.:"; \
+	  echo "    make lib ENGINE=/path/to/doomgeneric/doomgeneric"; \
+	  exit 1; }
+	@echo "=================== building $(LIBNAME) from $(ENGINE) ==================="
+	@rm -f $(LIBDIR)/*.o
+	@for n in $(DG_ENGINE_NAMES); do \
+	  $(CC) $(LIB_CFLAGS) -c "$(ENGINE)/$$n.c" -o "$(LIBDIR)/$$n.o" || exit 1; \
+	done
+	@$(CC) $(LIB_CFLAGS) -c bindings/doomgeneric_capi.c -o "$(LIBDIR)/capi.o"
+	@$(CC) $(LIBFLAG) -o "$(LIBDIR)/$(LIBNAME)" $(LIB_OBJS)
+	@echo "built $(LIBDIR)/$(LIBNAME)"
+	@echo "next: copy it where an example expects it, e.g."
+	@echo "      cp $(LIBDIR)/$(LIBNAME) examples/languages/rust/lib/    (rust/go)"
+	@echo "  or set DYLD_LIBRARY_PATH/LD_LIBRARY_PATH=$(LIBDIR)          (python/c#/java)"
 
 clean:
 	rm -rf $(BUILD)

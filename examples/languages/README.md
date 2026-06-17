@@ -4,8 +4,8 @@ DOOM is C, but you can drive it from almost any language because the engine is
 exposed through a tiny flat C ABI (see [`../../bindings/`](../../bindings)). The
 recipe is the same everywhere:
 
-1. **Build `libdoomgeneric` once** — follow
-   [`../../bindings/README.md`](../../bindings/README.md).
+1. **Build `libdoomgeneric` once** — `make lib ENGINE=/path/to/doomgeneric/doomgeneric`
+   from the package root (details in [`../../bindings/README.md`](../../bindings/README.md)).
 2. **Load it from your language** and register six callbacks.
 3. **Loop**: `dg_create(argc, argv)` once, then `dg_tick()` repeatedly.
 

@@ -184,9 +184,10 @@ Full walkthrough: **[docs/PORTING.md](docs/PORTING.md)**.
 DOOM is C, but you can drive it from almost anything. The
 [`bindings/`](bindings/) folder adds a flat C ABI (`dg_set_callbacks`,
 `dg_create`, `dg_tick`, `dg_screen_buffer`, ...) so you build `libdoomgeneric`
-once and load it from any language's FFI. There is one worked, documented example
-per language in [`examples/languages/`](examples/languages/), plus an Android
-(Kotlin + NDK/JNI) skeleton in [`examples/kotlin-android/`](examples/kotlin-android/).
+once (`make lib ENGINE=/path/to/doomgeneric/doomgeneric`) and load it from any
+language's FFI. There is one worked, documented example per language in
+[`examples/languages/`](examples/languages/), plus an Android (Kotlin + NDK/JNI)
+skeleton in [`examples/kotlin-android/`](examples/kotlin-android/).
 
 | Language | FFI | Language | FFI |
 |----------|-----|----------|-----|
