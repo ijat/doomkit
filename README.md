@@ -23,7 +23,7 @@ thing from first principles for someone who has never seen DOOM's internals.
 
 ---
 
-## Pick your platform
+## Pick your platform — or your language
 
 Two ways to use doomkit, depending on where you want DOOM to run:
 
@@ -32,7 +32,8 @@ Two ways to use doomkit, depending on where you want DOOM to run:
 - **Language binding** — build the engine once as a shared library
   (`make lib`) and drive it from another language over its FFI.
 
-Find your row, open that folder, follow its README.
+The first block of rows is platforms; the second is languages. Find your row,
+open that folder, follow its README.
 
 | I want to run DOOM… | Example | How it connects | Start with | Status |
 |----------------------|---------|-----------------|------------|--------|
