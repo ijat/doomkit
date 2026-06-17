@@ -24,6 +24,7 @@ pixels came out. Only the FFI mechanism differs.
 | Java | Panama FFM (JDK 22+) | [`java/`](java) | pure Java, no JNI |
 | Python | ctypes (stdlib) | [`python/`](python) | shortest binding |
 | Rust | `extern "C"` | [`rust/`](rust) | no crates needed |
+| Node.js | koffi (FFI) | [`nodejs/`](nodejs) | `npm install`, no native build |
 | Kotlin/Android | NDK + JNI | [`../kotlin-android/`](../kotlin-android) | engine compiled into the app `.so` |
 
 ## The shared shape, in pseudocode
@@ -48,8 +49,8 @@ loop: tick()                 # each tick ends by calling your draw_frame
 ## What's verified
 
 The C ABI and shared library are real and tested: in this repo's environment the
-**C, C++, Python, Rust, and C#** bindings were compiled/loaded against the actual
-`libdoomgeneric` and call through it successfully. **Go, Java, and
+**C, C++, Python, Rust, C#, and Node.js** bindings were compiled/loaded against
+the actual `libdoomgeneric` and call through it successfully. **Go, Java, and
 Kotlin/Android** are provided as correct reference code but need their own
 toolchains (Go, JDK 22, Android SDK/NDK) to build. None *play* DOOM without a WAD
 and the upstream engine — they are bindings, not a packaged game.

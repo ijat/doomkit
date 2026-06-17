@@ -15,3 +15,5 @@ examples/languages/csharp/obj/
 **/*.class
 __pycache__/
 *.pyc
+node_modules/
+package-lock.json
