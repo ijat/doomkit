@@ -11,7 +11,10 @@ Plus [`minimal_main.c`](minimal_main.c) — the canonical `doomgeneric_Create()`
 `doomgeneric_Tick()` loop on its own.
 
 New here? Start with [`platforms/null/platform_null.c`](platforms/null/platform_null.c):
-it's heavily commented and actually runs (`make run-null`). Then copy
+it's heavily commented and actually runs (`make run-null`). For the same callbacks
+driving the **real engine** headless, see
+[`platforms/null/platform_null_engine.c`](platforms/null/platform_null_engine.c)
+(`make run-null-engine ENGINE=... WAD=...`). Then copy
 [`platforms/template/platform_template.c`](platforms/template/platform_template.c)
 and fill in the six TODOs for your target.
 

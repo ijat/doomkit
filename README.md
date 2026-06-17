@@ -78,6 +78,7 @@ open that folder, follow its README.
 | I want to run DOOM… | Example | How it connects | Start with | Status |
 |----------------------|---------|-----------------|------------|--------|
 | **Headless / CI / to learn** | [`examples/platforms/null/`](examples/platforms/null) | zero-dependency port | `make run-null` | ✅ runs |
+| **Headless, but real DOOM** | [`examples/platforms/null/`](examples/platforms/null) | real engine, no display | `make run-null-engine` | ✅ runs (needs engine + WAD) |
 | **In a desktop window** | [`examples/platforms/sdl/`](examples/platforms/sdl) | SDL2 port | `examples/platforms/sdl/` README | ◦ ref |
 | **On a brand-new platform** | [`examples/platforms/template/`](examples/platforms/template) | fill in 6 TODOs | copy the file | — skeleton |
 | **In a web browser** | [`examples/platforms/wasm/`](examples/platforms/wasm) | Emscripten → `<canvas>` | `make wasm` | ◦ ref |
@@ -125,7 +126,7 @@ doomkit/
 │   └── doomgeneric_capi.{h,c} · register 6 callbacks at runtime; build a shared lib
 ├── examples/                 ← THE "IMPLEMENTATION CODE"
 │   ├── platforms/  ← implement the 6 DG_*, compiled WITH the engine
-│   │   ├── null/        · zero-dependency headless port — runnable! (make run-null)
+│   │   ├── null/        · headless: fake-engine demo (make run-null) + real-engine, no-display (make run-null-engine)
 │   │   ├── sdl/         · reference SDL2 desktop port
 │   │   ├── template/    · copy-me skeleton for a new platform
 │   │   ├── wasm/        · DOOM in the browser via Emscripten — runnable! (make wasm)
@@ -135,7 +136,7 @@ doomkit/
 │   └── minimal_main.c · the canonical Create()/Tick() loop
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← PORTING.md · CONTRACT.md · ARCHITECTURE.md · WAD.md · SOUND.md · GLOSSARY.md
-├── Makefile                  ← make test · coverage · run-null · lib · wasm
+├── Makefile                  ← make test · coverage · run-null · run-null-engine · lib · wasm
 ├── LICENSE · NOTICE.md       ← GPLv2 (+ Unity MIT) and attribution
 ```
 
@@ -258,6 +259,18 @@ cc -Iinclude -I<engine_dir> \
 ```
 
 Full walkthrough: **[docs/PORTING.md](docs/PORTING.md)**.
+
+The quickest way to see the *real* engine run (no SDL, no window) is the headless
+real-engine demo — it links the actual engine, ticks it for ~10 s, and writes a
+frame to disk:
+
+```sh
+make run-null-engine ENGINE=/path/to/doomgeneric/doomgeneric WAD=/path/to/doom1.wad
+# writes build/frame_engine.ppm — a real DOOM frame, rendered with no display
+```
+
+See [`examples/platforms/null/`](examples/platforms/null) for how it differs from
+the zero-dependency `make run-null` demo.
 
 ---
 

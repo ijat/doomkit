@@ -48,3 +48,27 @@ main(): doomgeneric_Create(); for(;;) doomgeneric_Tick();
 To turn a port like this into a *real* one, you'd delete the fake engine and link
 the actual DOOM engine instead — that's what [`../sdl/`](../sdl) shows and
 [`../template/`](../template) scaffolds.
+
+## Next notch: the real engine, still headless
+
+[`platform_null_engine.c`](platform_null_engine.c) is the same six `DG_*`
+callbacks written for *no screen*, but with the **fake engine removed and the
+real ~73k-line DOOM engine linked in**. It starts the engine, ticks it for ~10
+seconds of wall-clock time with no input (so you get the title screen and the
+attract-mode demo), and writes `build/frame_engine.ppm` — real DOOM, rendered
+without ever opening a window.
+
+Unlike `make run-null`, this one needs the two things any real build needs: the
+upstream **engine sources** and a **WAD** (see [PORTING.md](../../../docs/PORTING.md)
+and [WAD.md](../../../docs/WAD.md)):
+
+```sh
+make run-null-engine ENGINE=/path/to/doomgeneric/doomgeneric WAD=/path/to/doom1.wad
+```
+
+It builds the verified portable engine set + `platform_null_engine.c` into
+`build/null_engine`, runs it for 10 s, and writes `build/frame_engine.ppm`. Open
+it the same way as `frame.ppm` above — you should see a frame of actual DOOM
+gameplay, HUD and all. This is the bridge between the fake-engine demo and a
+genuine port like [`../sdl/`](../sdl): same callbacks, real engine, just no
+display.

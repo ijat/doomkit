@@ -61,7 +61,9 @@ the `dg_keyqueue` helper.
 
 Implement them against your platform's API. Use `examples/platforms/sdl/platform_sdl.c` as
 a worked reference and `examples/platforms/null/platform_null.c` to see them run with no
-backend at all.
+backend at all. For a halfway point — the six callbacks driving the *real* engine
+with no display — see `examples/platforms/null/platform_null_engine.c`
+(`make run-null-engine ENGINE=... WAD=...`).
 
 1. **`DG_Init`** — open a window/surface of `DOOMGENERIC_RESX × DOOMGENERIC_RESY`
    and initialise input. Call `dg_keyqueue_init(&my_queue)`.
@@ -134,6 +136,11 @@ reference for that same math — useful if you write a from-scratch video path.)
 
 You should get a window with the title screen. Arrow keys move, `Ctrl` fires,
 `Space` opens doors, `Esc` opens the menu.
+
+> No window backend yet (or running in CI)? You can still confirm the engine and
+> your build wiring work headless: `make run-null-engine ENGINE=... WAD=...` links
+> the real engine to a no-display port, ticks it ~10 s, and writes a real DOOM
+> frame to `build/frame_engine.ppm`.
 
 ---
 

@@ -7,6 +7,11 @@
 #                    per-file report. Target is 100% for everything in src/.
 #    make run-null   Build and run the dependency-free "null" example, which
 #                    drives the helper modules end-to-end and writes frame.ppm.
+#    make run-null-engine
+#                    Build and run the SAME headless port against the REAL engine
+#                    (no display); ticks ~10s and writes frame_engine.ppm. Needs
+#                    the engine sources and a WAD:
+#                      make run-null-engine ENGINE=/path/to/doomgeneric/doomgeneric WAD=/path/doom1.wad
 #    make lib        Build the shared libdoomgeneric the language bindings load.
 #                    Needs the upstream engine sources:
 #                      make lib ENGINE=/path/to/doomgeneric/doomgeneric
@@ -15,8 +20,9 @@
 #                      make wasm ENGINE=/path/to/doomgeneric/doomgeneric
 #    make clean      Remove all build output.
 #
-#  test/coverage/run-null need only a C compiler. `lib` additionally needs the
-#  upstream DOOM engine sources (this package does not vendor them).
+#  test/coverage/run-null need only a C compiler. `lib`, `wasm` and
+#  `run-null-engine` additionally need the upstream DOOM engine sources (this
+#  package does not vendor them); `run-null-engine` also needs a WAD.
 # =============================================================================
 
 CC      ?= cc
@@ -78,7 +84,7 @@ EMCC    ?= emcc
 WASMDIR  = $(BUILD)/wasm
 DG_ENGINE_SRCS = $(addprefix $(ENGINE)/,$(addsuffix .c,$(DG_ENGINE_NAMES)))
 
-.PHONY: all test coverage run-null lib wasm clean
+.PHONY: all test coverage run-null run-null-engine lib wasm clean
 all: test
 
 # -----------------------------------------------------------------------------
@@ -138,6 +144,43 @@ run-null: $(BUILD)/null_demo
 
 $(BUILD)/null_demo: $(NULL_SRCS) | $(BUILD)
 	$(CC) $(CFLAGS) $(NULL_SRCS) -o $@
+
+# -----------------------------------------------------------------------------
+#  make run-null-engine  -- the SAME headless port, but driving the REAL engine.
+#
+#  Like `run-null`, but instead of a fake engine it links the verified portable
+#  engine set (DG_ENGINE_NAMES, from ENGINE=...) with platform_null_engine.c,
+#  runs it for ~10 seconds with no display, and writes build/frame_engine.ppm.
+#  Needs the upstream engine sources AND a WAD (game data):
+#    make run-null-engine ENGINE=/path/to/doomgeneric/doomgeneric WAD=/path/doom1.wad
+# -----------------------------------------------------------------------------
+NULL_ENGINE_OBJDIR = $(BUILD)/null_engine_obj
+NULL_ENGINE_OBJS = $(addprefix $(NULL_ENGINE_OBJDIR)/,$(addsuffix .o,$(DG_ENGINE_NAMES)))
+
+run-null-engine: $(BUILD)/null_engine
+	@test -n "$(WAD)" || { \
+	  echo "ERROR: no WAD given. The real engine needs game data, e.g.:"; \
+	  echo "  make run-null-engine ENGINE=$(ENGINE) WAD=/path/to/doom1.wad"; \
+	  exit 1; }
+	@test -f "$(WAD)" || { echo "ERROR: WAD not found: $(WAD)"; exit 1; }
+	@echo "=================== running null engine demo ==================="
+	@cd $(BUILD) && ./null_engine -iwad "$(abspath $(WAD))"
+	@echo "wrote $(BUILD)/frame_engine.ppm"
+
+$(BUILD)/null_engine: examples/platforms/null/platform_null_engine.c | $(BUILD)
+	@test -f "$(ENGINE)/doomgeneric.h" || { \
+	  echo "ERROR: DOOM engine sources not found at ENGINE=$(ENGINE)"; \
+	  echo "  This package does not vendor the engine. Point ENGINE at upstream"; \
+	  echo "  doomgeneric's 'doomgeneric/' folder (the one with d_main.c), e.g.:"; \
+	  echo "    make run-null-engine ENGINE=/path/to/doomgeneric/doomgeneric WAD=..."; \
+	  exit 1; }
+	@echo "=================== building null_engine from $(ENGINE) ==================="
+	@rm -rf $(NULL_ENGINE_OBJDIR) && mkdir -p $(NULL_ENGINE_OBJDIR)
+	@for n in $(DG_ENGINE_NAMES); do \
+	  $(CC) -w -I$(ENGINE) -Iinclude -c "$(ENGINE)/$$n.c" -o "$(NULL_ENGINE_OBJDIR)/$$n.o" || exit 1; \
+	done
+	$(CC) $(CSTD) $(WARN) -Iinclude -I$(ENGINE) \
+	  examples/platforms/null/platform_null_engine.c $(NULL_ENGINE_OBJS) -lm -o $@
 
 # -----------------------------------------------------------------------------
 #  make lib  -- build libdoomgeneric (engine + C-ABI shim) for the bindings.
