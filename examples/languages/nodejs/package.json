@@ -1,0 +1,14 @@
+{
+  "name": "doomkit-node-example",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Drive the doomkit shared library from Node.js via koffi (FFI).",
+  "license": "GPL-2.0-only",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node doom.js"
+  },
+  "dependencies": {
+    "koffi": "^2.9.0"
+  }
+}

@@ -195,7 +195,7 @@ skeleton in [`examples/kotlin-android/`](examples/kotlin-android/).
 | C / C++ | link + register | Java | Panama FFM (JDK 22+) |
 | Go | cgo | Python | ctypes |
 | C# | P/Invoke | Rust | `extern "C"` |
-| Kotlin/Android | NDK + JNI | | |
+| Node.js | koffi (FFI) | Kotlin/Android | NDK + JNI |
 
 Start with [`bindings/README.md`](bindings/README.md) (build the shared library),
 then [`examples/languages/README.md`](examples/languages/README.md) (pick a
