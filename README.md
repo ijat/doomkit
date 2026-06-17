@@ -51,11 +51,12 @@ doomkit/
 │   ├── sdl/     · reference SDL2 port
 │   ├── template/· copy-me skeleton for a new platform
 │   ├── minimal_main.c
+│   ├── wasm/    · DOOM in the browser via Emscripten — runnable! (make wasm)
 │   ├── kotlin-android/· Android (Kotlin + NDK/JNI) skeleton
 │   └── languages/· C, C++, Go, C#, Java, Python, Rust — one binding each
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← ARCHITECTURE.md · CONTRACT.md · PORTING.md
-├── Makefile                  ← make test · make coverage · make run-null
+├── Makefile                  ← make test · coverage · run-null · lib · wasm
 ├── LICENSE · NOTICE.md       ← GPLv2 (+ Unity MIT) and attribution
 ```
 
@@ -199,6 +200,12 @@ skeleton in [`examples/kotlin-android/`](examples/kotlin-android/).
 Start with [`bindings/README.md`](bindings/README.md) (build the shared library),
 then [`examples/languages/README.md`](examples/languages/README.md) (pick a
 language).
+
+## In the browser (WebAssembly)
+
+`make wasm ENGINE=/path/to/doomgeneric/doomgeneric` compiles DOOM to WebAssembly
+with Emscripten and renders it to a `<canvas>` — serve `build/wasm/` and pick a
+WAD in the page. See [`examples/wasm/`](examples/wasm/).
 
 ## Documentation
 

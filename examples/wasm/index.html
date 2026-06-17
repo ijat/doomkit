@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!-- ============================================================================
+  examples/wasm/index.html  --  The web page that hosts DOOM (WASM).
+  GPLv2. See LICENSE.
+
+  Responsibilities (the WASM module in doom.js does the actual game):
+    1. give the module a <canvas> to draw into,
+    2. define dgDrawFrame(ptr,w,h) which the C side calls every frame,
+    3. forward keyboard events as DOOM key codes via Module._wasm_push_key,
+    4. let the user pick a WAD, write it into the virtual filesystem, then start.
+============================================================================= -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>doomkit — DOOM in WebAssembly</title>
+<style>
+  body   { background:#111; color:#ddd; font-family:system-ui, sans-serif; text-align:center; }
+  /* The canvas is 640x400; scale it up with CSS and keep pixels crisp. */
+  canvas { width:640px; height:400px; background:#000; image-rendering:pixelated; border:1px solid #333; }
+  #bar   { margin:12px; }
+  a { color:#6cf; }
+</style>
+</head>
+<body>
+  <h1>doomkit · DOOM in the browser</h1>
+  <div id="bar">
+    Pick a WAD to start:
+    <input type="file" id="wad" accept=".wad">
+    <span id="status">waiting for WAD…</span>
+  </div>
+  <canvas id="screen" width="640" height="400" tabindex="0"></canvas>
+  <p>Arrows move · Ctrl fire · Space use · Enter/Esc menus. Sound is disabled in this demo.</p>
+
+<script>
+  // --- canvas drawing -------------------------------------------------------
+  const canvas = document.getElementById('screen');
+  const ctx = canvas.getContext('2d');
+  let imageData = ctx.createImageData(canvas.width, canvas.height);
+
+  // Called from C (DG_DrawFrame) once per frame. `ptr` points at width*height
+  // 32-bit 0x00RRGGBB pixels inside the WASM heap.
+  window.dgDrawFrame = function (ptr, w, h) {
+    const heap = Module.HEAPU32;        // fresh view (memory can grow)
+    const base = ptr >>> 2;             // byte pointer -> uint32 index
+    const out = imageData.data;
+    for (let i = 0, n = w * h; i < n; i++) {
+      const v = heap[base + i];         // 0x00RRGGBB
+      const j = i << 2;
+      out[j]     = (v >> 16) & 0xff;    // R
+      out[j + 1] = (v >> 8) & 0xff;     // G
+      out[j + 2] = v & 0xff;            // B
+      out[j + 3] = 0xff;                // A
+    }
+    ctx.putImageData(imageData, 0, 0);
+  };
+
+  // --- keyboard: browser key -> DOOM key code (see include/doomkit/dg_keys.h) -
+  function toDoomKey(e) {
+    switch (e.key) {
+      case 'ArrowLeft':  return 0xac;
+      case 'ArrowRight': return 0xae;
+      case 'ArrowUp':    return 0xad;
+      case 'ArrowDown':  return 0xaf;
+      case 'Control':    return 0xa3; // fire
+      case ' ':          return 0xa2; // use
+      case 'Enter':      return 13;
+      case 'Escape':     return 27;
+      case 'Tab':        return 9;
+      case 'Shift':      return 0x80 + 0x36; // run
+      case 'Alt':        return 0x80 + 0x38; // strafe
+      case 'Backspace':  return 0x7f;
+    }
+    // Any single printable character -> its (lower-case) ASCII code.
+    if (e.key.length === 1) return e.key.toLowerCase().charCodeAt(0);
+    return 0;
+  }
+  function sendKey(e, pressed) {
+    const k = toDoomKey(e);
+    if (!k) return;
+    if (window.Module && Module._wasm_push_key) Module._wasm_push_key(pressed ? 1 : 0, k);
+    e.preventDefault(); // stop arrows/space from scrolling the page
+  }
+  window.addEventListener('keydown', e => sendKey(e, true));
+  window.addEventListener('keyup',   e => sendKey(e, false));
+
+  // --- the Emscripten module ------------------------------------------------
+  // INVOKE_RUN=0 in the build means main() does NOT run automatically; we call
+  // it ourselves (via callMain) only after a WAD is in the filesystem.
+  var Module = {
+    canvas: canvas,
+    print: (t) => console.log(t),
+    printErr: (t) => console.warn(t),
+  };
+
+  // --- WAD picker -----------------------------------------------------------
+  let started = false;
+  document.getElementById('wad').addEventListener('change', async (ev) => {
+    const file = ev.target.files[0];
+    if (!file || started) return;
+    const status = document.getElementById('status');
+    status.textContent = 'loading ' + file.name + '…';
+
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    Module.FS.writeFile('/doom.wad', bytes);   // into the virtual filesystem
+    started = true;
+    status.textContent = 'running ' + file.name;
+    canvas.focus();
+    Module.callMain(['-iwad', '/doom.wad']);    // -> main(argc, argv) in C
+  });
+</script>
+<!-- Emscripten output. Build with `make wasm` or examples/wasm/build.sh. -->
+<script src="doom.js"></script>
+</body>
+</html>

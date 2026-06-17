@@ -10,6 +10,9 @@
 #    make lib        Build the shared libdoomgeneric the language bindings load.
 #                    Needs the upstream engine sources:
 #                      make lib ENGINE=/path/to/doomgeneric/doomgeneric
+#    make wasm       Compile DOOM to WebAssembly for the browser example.
+#                    Needs the Emscripten SDK (emcc) and the engine sources:
+#                      make wasm ENGINE=/path/to/doomgeneric/doomgeneric
 #    make clean      Remove all build output.
 #
 #  test/coverage/run-null need only a C compiler. `lib` additionally needs the
@@ -68,7 +71,14 @@ DG_ENGINE_NAMES = dummy am_map doomdef doomstat dstrings d_event d_items d_iwad 
 
 LIB_OBJS = $(addprefix $(LIBDIR)/,$(addsuffix .o,$(DG_ENGINE_NAMES))) $(LIBDIR)/capi.o
 
-.PHONY: all test coverage run-null lib clean
+# ---- WebAssembly build (make wasm) -----------------------------------------
+# Same engine set, compiled to WASM by Emscripten together with the browser
+# platform port. emcc must be on PATH.
+EMCC    ?= emcc
+WASMDIR  = $(BUILD)/wasm
+DG_ENGINE_SRCS = $(addprefix $(ENGINE)/,$(addsuffix .c,$(DG_ENGINE_NAMES)))
+
+.PHONY: all test coverage run-null lib wasm clean
 all: test
 
 # -----------------------------------------------------------------------------
@@ -157,6 +167,36 @@ lib: | $(LIBDIR)
 	@echo "next: copy it where an example expects it, e.g."
 	@echo "      cp $(LIBDIR)/$(LIBNAME) examples/languages/rust/lib/    (rust/go)"
 	@echo "  or set DYLD_LIBRARY_PATH/LD_LIBRARY_PATH=$(LIBDIR)          (python/c#/java)"
+
+# -----------------------------------------------------------------------------
+#  make wasm  -- compile DOOM to WebAssembly for the browser example.
+#
+#  Compiles the portable engine set + examples/wasm/platform_wasm.c + the
+#  key-queue helper into one .wasm with Emscripten. Output: build/wasm/.
+#  Needs emcc (the Emscripten SDK) on PATH and the upstream engine sources.
+# -----------------------------------------------------------------------------
+$(WASMDIR):
+	@mkdir -p $(WASMDIR)
+
+wasm: | $(WASMDIR)
+	@command -v $(EMCC) >/dev/null 2>&1 || { \
+	  echo "ERROR: '$(EMCC)' not found. Install the Emscripten SDK and run:"; \
+	  echo "    source /path/to/emsdk/emsdk_env.sh"; \
+	  exit 1; }
+	@test -f "$(ENGINE)/doomgeneric.h" || { \
+	  echo "ERROR: DOOM engine sources not found at ENGINE=$(ENGINE)"; \
+	  echo "    make wasm ENGINE=/path/to/doomgeneric/doomgeneric"; \
+	  exit 1; }
+	@echo "=================== building WebAssembly from $(ENGINE) ==================="
+	$(EMCC) -O2 -w -I$(ENGINE) -Iinclude \
+	  examples/wasm/platform_wasm.c src/dg_keyqueue.c $(DG_ENGINE_SRCS) \
+	  -sINVOKE_RUN=0 -sALLOW_MEMORY_GROWTH=1 \
+	  -sEXPORTED_FUNCTIONS=_main,_wasm_push_key \
+	  -sEXPORTED_RUNTIME_METHODS=callMain,FS \
+	  -o $(WASMDIR)/doom.js
+	@cp examples/wasm/index.html $(WASMDIR)/
+	@echo "built $(WASMDIR)/{doom.js,doom.wasm,index.html}"
+	@echo "serve it:  (cd $(WASMDIR) && python3 -m http.server 8000)  then open http://localhost:8000/"
 
 clean:
 	rm -rf $(BUILD)
