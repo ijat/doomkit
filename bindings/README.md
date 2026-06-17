@@ -40,8 +40,24 @@ You need the upstream DOOM engine sources (this package does not vendor them):
 
 ```sh
 git clone https://github.com/ozkl/doomgeneric
-ENGINE=doomgeneric/doomgeneric        # folder with d_main.c, i_video.c, ...
 ```
+
+### The easy way: `make lib`
+
+From the package root, point the `ENGINE` variable at the upstream
+`doomgeneric/` folder (the one with `d_main.c`):
+
+```sh
+make lib ENGINE=/path/to/doomgeneric/doomgeneric
+# -> build/lib/libdoomgeneric.{dylib,so}
+```
+
+That target compiles the verified portable engine set + this shim and links the
+shared library for your OS. The rest of this section explains what it does under
+the hood (and how to do it by hand on Windows, which the Makefile does not
+cover).
+
+### By hand
 
 Compile every engine `.c` **except** the desktop platform files
 (`doomgeneric_*.c` — they define `DG_*` and would clash), plus this shim, into a
