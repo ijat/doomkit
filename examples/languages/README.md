@@ -11,7 +11,9 @@ recipe is the same everywhere:
 
 Every example here is the *same* tiny headless program — it boots the engine,
 runs ~200 frames, and writes `frame.ppm` at frame 100 so you can confirm real
-pixels came out. Only the FFI mechanism differs.
+pixels came out. Only the FFI mechanism differs. (The one exception is
+[`csharp-avalonia/`](csharp-avalonia), which uses the same binding to draw the
+frames in a real desktop window instead.)
 
 ## Pick your language
 
@@ -21,6 +23,7 @@ pixels came out. Only the FFI mechanism differs.
 | C++ | link + register | [`cpp/`](cpp) | RAII framebuffer view; non-capturing callbacks |
 | Go | cgo + `//export` | [`go/`](go) | needs a `bridge.c` helper |
 | C# | P/Invoke | [`csharp/`](csharp) | keep delegates rooted |
+| C# + Avalonia | P/Invoke | [`csharp-avalonia/`](csharp-avalonia) | **draws to a window** (not headless); arrows move, E/Space/Enter |
 | Java | Panama FFM (JDK 22+) | [`java/`](java) | pure Java, no JNI |
 | Python | ctypes (stdlib) | [`python/`](python) | shortest binding |
 | Rust | `extern "C"` | [`rust/`](rust) | no crates needed |

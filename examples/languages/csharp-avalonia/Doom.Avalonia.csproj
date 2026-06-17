@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- A minimal Avalonia desktop app that draws DOOM's framebuffer.
+       Same P/Invoke binding as ../csharp, but blits to a window instead of
+       writing a PPM. Screen only — no input wired. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>          <!-- keep the console so DOOM's logs show -->
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <AssemblyName>doomavalonia</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
+  </ItemGroup>
+
+  <!-- Make libdoomgeneric loadable by copying it next to the binary.
+       Drop build/lib/libdoomgeneric.{dylib,so} (or doomgeneric.dll) in this
+       folder; the Condition keeps the build working if it isn't here yet. -->
+  <ItemGroup>
+    <None Include="libdoomgeneric.dylib" CopyToOutputDirectory="PreserveNewest" Condition="Exists('libdoomgeneric.dylib')" />
+    <None Include="libdoomgeneric.so"    CopyToOutputDirectory="PreserveNewest" Condition="Exists('libdoomgeneric.so')" />
+    <None Include="doomgeneric.dll"      CopyToOutputDirectory="PreserveNewest" Condition="Exists('doomgeneric.dll')" />
+  </ItemGroup>
+
+</Project>

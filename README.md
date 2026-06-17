@@ -97,7 +97,7 @@ doomkit/
 │   │   ├── wasm/        · DOOM in the browser via Emscripten — runnable! (make wasm)
 │   │   └── kotlin-android/· Android (Kotlin + NDK/JNI) skeleton
 │   ├── languages/  ← FFI to a prebuilt libdoomgeneric (make lib)
-│   │   └── c · cpp · go · csharp · java · python · rust · nodejs
+│   │   └── c · cpp · go · csharp · csharp-avalonia (windowed) · java · python · rust · nodejs
 │   └── minimal_main.c · the canonical Create()/Tick() loop
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← ARCHITECTURE.md · CONTRACT.md · PORTING.md
