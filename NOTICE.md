@@ -23,3 +23,23 @@ from GPLv2 source.
 
 The MIT license of Unity is compatible with GPLv2; Unity is used only as a test
 dependency and is not part of the shipped library.
+
+## Why GPLv2? Can it be MIT/Apache instead?
+
+**No — the license is inherited, not chosen.** id Software released the DOOM
+source under the GPLv2, and doomgeneric is GPLv2. doomkit's helpers are *derived
+works* of that source (see the table above), and GPLv2 is a **copyleft** license:
+every derivative must keep the same license. So a more permissive license (MIT,
+Apache, BSD) is legally not available for this code.
+
+The only way to get a permissive license would be a **clean-room rewrite** — a
+from-scratch reimplementation written from a behaviour spec, by someone who has
+*not* read the GPL source. That is the opposite of what doomkit is: a faithful,
+documented, intentionally-derived reference of the real engine's porting layer.
+If you need a permissive port for a proprietary product, a clean-room
+reimplementation of the contract in `include/doomkit/doomkit.h` is the path — but
+that is a different project.
+
+What GPLv2 means for *you* in practice: you can use, modify, and ship doomkit
+(and DOOM) freely, including commercially, as long as you also make the
+corresponding source available under GPLv2.
