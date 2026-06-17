@@ -40,11 +40,21 @@
   // Called from C (DG_DrawFrame) once per frame. `ptr` points at width*height
   // 32-bit 0x00RRGGBB pixels inside the WASM heap.
   window.dgDrawFrame = function (ptr, w, h) {
-    const heap = Module.HEAPU32;        // fresh view (memory can grow)
-    const base = ptr >>> 2;             // byte pointer -> uint32 index
+    // Get the WASM memory buffer FRESH each frame: with ALLOW_MEMORY_GROWTH the
+    // engine can grow memory and detach any cached view. We prefer the exported
+    // HEAPU32 (its .buffer is always current) and fall back to wasmMemory.
+    const buffer =
+        (Module.HEAPU32 && Module.HEAPU32.buffer) ||
+        (Module.wasmMemory && Module.wasmMemory.buffer);
+    if (!buffer) {
+      console.error('WASM heap not exposed — rebuild with HEAPU32 in ' +
+                    'EXPORTED_RUNTIME_METHODS (make wasm), then hard-refresh.');
+      return;
+    }
+    const src = new Uint32Array(buffer, ptr, w * h); // view, no copy
     const out = imageData.data;
     for (let i = 0, n = w * h; i < n; i++) {
-      const v = heap[base + i];         // 0x00RRGGBB
+      const v = src[i];                 // 0x00RRGGBB
       const j = i << 2;
       out[j]     = (v >> 16) & 0xff;    // R
       out[j + 1] = (v >> 8) & 0xff;     // G
