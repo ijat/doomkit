@@ -1,0 +1,7 @@
+build/
+*.o
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+frame.ppm
