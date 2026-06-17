@@ -12,6 +12,12 @@ examples/languages/go/lib/
 examples/languages/rust/target/
 examples/languages/csharp/bin/
 examples/languages/csharp/obj/
+examples/languages/csharp-avalonia/bin/
+examples/languages/csharp-avalonia/obj/
+examples/languages/csharp-avalonia/.idea/
+examples/languages/csharp-avalonia/libdoomgeneric.dylib
+examples/languages/csharp-avalonia/libdoomgeneric.so
+examples/languages/csharp-avalonia/doomgeneric.dll
 **/*.class
 __pycache__/
 *.pyc
