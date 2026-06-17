@@ -1,10 +1,10 @@
 /* =============================================================================
  *  dg_keyqueue.c  --  Fixed-size circular buffer of keyboard events.
- *  See include/genericdoom/dg_keyqueue.h for the full explanation.
+ *  See include/doomkit/dg_keyqueue.h for the full explanation.
  *  GNU General Public License v2. See LICENSE.
  * ===========================================================================*/
 
-#include "genericdoom/dg_keyqueue.h"
+#include "doomkit/dg_keyqueue.h"
 
 /*
  *  A note on the index arithmetic

@@ -1,4 +1,4 @@
-# Run genericdoom from C# (.NET / P/Invoke)
+# Run doomkit from C# (.NET / P/Invoke)
 
 .NET's built-in interop is **P/Invoke** (`[DllImport]`). Delegates marshal to C
 function pointers automatically, so the six callbacks are just methods.

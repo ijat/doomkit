@@ -1,4 +1,4 @@
-# Run genericdoom from other languages
+# Run doomkit from other languages
 
 DOOM is C, but you can drive it from almost any language because the engine is
 exposed through a tiny flat C ABI (see [`../../bindings/`](../../bindings)). The

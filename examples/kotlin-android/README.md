@@ -1,4 +1,4 @@
-# Run genericdoom on Android (Kotlin + NDK/JNI)
+# Run doomkit on Android (Kotlin + NDK/JNI)
 
 Android's built-in way to use native code is the **NDK + JNI**. Instead of
 loading a prebuilt `libdoomgeneric` and registering callbacks (the desktop

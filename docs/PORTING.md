@@ -5,7 +5,7 @@ backend by writing **one file with six functions**. No prior DOOM-internals
 knowledge required.
 
 > Prerequisite mental model: read the top of
-> [`include/genericdoom/genericdoom.h`](../include/genericdoom/genericdoom.h)
+> [`include/doomkit/doomkit.h`](../include/doomkit/doomkit.h)
 > (the power-socket analogy) and skim [`CONTRACT.md`](CONTRACT.md). That's all
 > the theory you need.
 
@@ -103,5 +103,5 @@ You should get a window with the title screen. Arrow keys move, `Ctrl` fires,
 ## What "done" looks like
 
 A single `platform_myplatform.c`, no engine edits, DOOM playable. That's the
-whole point of genericdoom: the hard part (a full 3D game) is already solved; you
+whole point of doomkit: the hard part (a full 3D game) is already solved; you
 only teach it about *your* screen, clock and keyboard.

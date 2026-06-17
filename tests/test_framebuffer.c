@@ -5,7 +5,7 @@
  * ===========================================================================*/
 
 #include "unity.h"
-#include "genericdoom/dg_framebuffer.h"
+#include "doomkit/dg_framebuffer.h"
 
 void setUp(void) {}
 void tearDown(void) {}

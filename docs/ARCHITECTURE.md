@@ -13,7 +13,7 @@ where the small porting seam is.
         YOUR PLATFORM                 THE PORTING SEAM              THE DOOM ENGINE
    ┌──────────────────────┐      ┌──────────────────────┐    ┌────────────────────────┐
    │ main()               │      │                      │    │ doomgeneric_Create()   │
-   │   doomgeneric_Create ├─────▶│  genericdoom.h       ├───▶│ D_DoomMain()  (boot)   │
+   │   doomgeneric_Create ├─────▶│  doomkit.h       ├───▶│ D_DoomMain()  (boot)   │
    │   loop:              │      │  (the contract)      │    │                        │
    │     doomgeneric_Tick ├─────▶│                      ├───▶│ doomgeneric_Tick()     │
    │                      │      │   DG_ScreenBuffer    │◀───┤   i_video.c  (draws)   │
@@ -29,7 +29,7 @@ where the small porting seam is.
 
 Everything in the right-hand column is original id Software code. You never edit
 it. The middle column — six callbacks, two lifecycle calls, one framebuffer — is
-the whole interface, and it is what `include/genericdoom/` documents and what
+the whole interface, and it is what `include/doomkit/` documents and what
 `src/` extracts the testable bits of.
 
 ---

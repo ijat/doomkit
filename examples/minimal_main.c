@@ -4,7 +4,7 @@
  *  GNU General Public License v2. See LICENSE.
  * =============================================================================
  *
- *  This is the entire "main loop" of a genericdoom port. It does just two
+ *  This is the entire "main loop" of a doomkit port. It does just two
  *  things: start the engine once, then tick it forever. The engine pulls input,
  *  runs the game, renders into DG_ScreenBuffer and calls your DG_DrawFrame()
  *  inside each tick -- so this loop stays this small no matter the platform.
@@ -18,7 +18,7 @@
  *  instance, hands the loop to the browser. Use whichever fits your platform.
  * ===========================================================================*/
 
-#include "genericdoom/genericdoom.h"
+#include "doomkit/doomkit.h"
 
 int main(int argc, char **argv)
 {

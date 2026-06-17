@@ -1,7 +1,7 @@
 // =============================================================================
 //  examples/languages/cpp/main.cpp
 // -----------------------------------------------------------------------------
-//  Drive the genericdoom shared library from C++. GPLv2. See LICENSE.
+//  Drive the doomkit shared library from C++. GPLv2. See LICENSE.
 // =============================================================================
 //
 //  The C API is already extern "C", so C++ can call it directly. The only C++

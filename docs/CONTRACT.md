@@ -1,7 +1,7 @@
 # The porting contract — precise semantics
 
 This is the formal reference for every function and value in
-`include/genericdoom/genericdoom.h`. If the header comments are the "what", this
+`include/doomkit/doomkit.h`. If the header comments are the "what", this
 is the "exactly how".
 
 ---

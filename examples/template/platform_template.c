@@ -5,17 +5,17 @@
  * =============================================================================
  *
  *  Copy this file to platform_<yourthing>.c and fill in the SIX TODOs. That is
- *  the entire job of porting DOOM with genericdoom. Each callback's contract is
- *  documented in include/genericdoom/genericdoom.h and docs/CONTRACT.md.
+ *  the entire job of porting DOOM with doomkit. Each callback's contract is
+ *  documented in include/doomkit/doomkit.h and docs/CONTRACT.md.
  *
  *  The helper modules below are optional but handle the two fiddly parts for
  *  you (key translation and a thread-safe-ish event queue). Delete the includes
  *  if your platform does not need them.
  * ===========================================================================*/
 
-#include "genericdoom/genericdoom.h"
-#include "genericdoom/dg_keyqueue.h"   /* a ready-made input ring buffer      */
-#include "genericdoom/dg_keymap.h"     /* SDL-style key -> DOOM key (adaptable) */
+#include "doomkit/doomkit.h"
+#include "doomkit/dg_keyqueue.h"   /* a ready-made input ring buffer      */
+#include "doomkit/dg_keymap.h"     /* SDL-style key -> DOOM key (adaptable) */
 
 /* A queue to bridge "OS delivers a key" and "engine asks for a key". */
 static dg_keyqueue_t s_keys;

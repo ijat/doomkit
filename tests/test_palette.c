@@ -5,7 +5,7 @@
  * ===========================================================================*/
 
 #include "unity.h"
-#include "genericdoom/dg_palette.h"
+#include "doomkit/dg_palette.h"
 
 void setUp(void) {}
 void tearDown(void) {}

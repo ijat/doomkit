@@ -1,7 +1,7 @@
 // =============================================================================
 //  examples/languages/rust/src/main.rs
 // -----------------------------------------------------------------------------
-//  Drive the genericdoom shared library from Rust using its built-in C FFI
+//  Drive the doomkit shared library from Rust using its built-in C FFI
 //  (extern "C"). No crates required. GPLv2. See LICENSE.
 // =============================================================================
 //

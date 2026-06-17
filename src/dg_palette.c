@@ -1,12 +1,12 @@
 /* =============================================================================
  *  dg_palette.c  --  Paletted (8-bit) pixels  ->  RGB pixels.
- *  See include/genericdoom/dg_palette.h for the background on why DOOM is
+ *  See include/doomkit/dg_palette.h for the background on why DOOM is
  *  paletted and how the two-step (set palette, then convert) flow works.
  *  Derived from cmap_to_fb() / cmap_to_rgb565() / I_SetPalette() in i_video.c.
  *  GNU General Public License v2. See LICENSE.
  * ===========================================================================*/
 
-#include "genericdoom/dg_palette.h"
+#include "doomkit/dg_palette.h"
 
 void dg_palette_set(dg_palette_t *pal, const uint8_t rgb[768],
                     const dg_gamma_table_t gamma)

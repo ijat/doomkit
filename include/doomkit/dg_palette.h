@@ -38,8 +38,8 @@
  *  unit-test.
  * ===========================================================================*/
 
-#ifndef GENERICDOOM_DG_PALETTE_H
-#define GENERICDOOM_DG_PALETTE_H
+#ifndef DOOMKIT_DG_PALETTE_H
+#define DOOMKIT_DG_PALETTE_H
 
 #include <stdint.h>
 
@@ -114,4 +114,4 @@ uint16_t dg_color_pack565(dg_color_t c);
 }
 #endif
 
-#endif /* GENERICDOOM_DG_PALETTE_H */
+#endif /* DOOMKIT_DG_PALETTE_H */

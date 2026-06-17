@@ -1,9 +1,9 @@
-# Run genericdoom from pure Java (Project Panama / FFM)
+# Run doomkit from pure Java (Project Panama / FFM)
 
 "Pure Java" means **no JNI and no hand-written C glue**. Java 22's Foreign
 Function & Memory API (`java.lang.foreign`) can both call native functions
 (downcalls) and expose Java methods as C function pointers (upcalls) — which is
-exactly what genericdoom's callback design needs.
+exactly what doomkit's callback design needs.
 
 ## Concepts in `Doom.java`
 

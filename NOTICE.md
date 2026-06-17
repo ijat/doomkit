@@ -7,7 +7,7 @@ from GPLv2 source.
 
 | Part of this package | Derived from | License |
 |----------------------|--------------|---------|
-| `include/genericdoom/genericdoom.h`, `dg_keys.h` | doomgeneric `doomgeneric.h`, `doomkeys.h` (id Software DOOM) | GPLv2 |
+| `include/doomkit/doomkit.h`, `dg_keys.h` | doomgeneric `doomgeneric.h`, `doomkeys.h` (id Software DOOM) | GPLv2 |
 | `src/dg_keyqueue.c`, `src/dg_keymap.c` | the key queue & `convertToDoomKey()` in doomgeneric's SDL port | GPLv2 |
 | `src/dg_palette.c` | `cmap_to_fb()` / `I_SetPalette()` in doomgeneric `i_video.c` | GPLv2 |
 | `src/dg_framebuffer.c` | offset math in `I_FinishUpdate()` in doomgeneric `i_video.c` | GPLv2 |

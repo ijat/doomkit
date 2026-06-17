@@ -1,5 +1,5 @@
 // =============================================================================
-//  MainActivity.kt  --  Minimal Android host for genericdoom.
+//  MainActivity.kt  --  Minimal Android host for doomkit.
 // -----------------------------------------------------------------------------
 //  GPLv2. See LICENSE.
 // =============================================================================
@@ -22,7 +22,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import java.io.File
 
-// DOOM key codes we forward (mirror of include/genericdoom/dg_keys.h).
+// DOOM key codes we forward (mirror of include/doomkit/dg_keys.h).
 private const val KEY_FIRE = 0xa3
 private const val KEY_USE = 0xa2
 private const val KEY_UP = 0xad

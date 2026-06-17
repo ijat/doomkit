@@ -2,7 +2,7 @@
 # =============================================================================
 #  examples/languages/python/doom.py
 # -----------------------------------------------------------------------------
-#  Drive the genericdoom shared library from Python using ctypes (the built-in
+#  Drive the doomkit shared library from Python using ctypes (the built-in
 #  FFI in the standard library -- no pip packages). GPLv2. See LICENSE.
 # =============================================================================
 #

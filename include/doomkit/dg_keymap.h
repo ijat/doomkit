@@ -26,8 +26,8 @@
  *  explicit list below only needs the "special" keys.
  * ===========================================================================*/
 
-#ifndef GENERICDOOM_DG_KEYMAP_H
-#define GENERICDOOM_DG_KEYMAP_H
+#ifndef DOOMKIT_DG_KEYMAP_H
+#define DOOMKIT_DG_KEYMAP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,4 +50,4 @@ unsigned char dg_keymap_from_sdl(unsigned int key);
 }
 #endif
 
-#endif /* GENERICDOOM_DG_KEYMAP_H */
+#endif /* DOOMKIT_DG_KEYMAP_H */

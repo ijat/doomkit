@@ -1,4 +1,4 @@
-# Run genericdoom from C++
+# Run doomkit from C++
 
 C++ talks to the library through the same `extern "C"` API as C — no wrapper
 layer needed. This example just adds a small `Framebuffer` class for idiomatic
