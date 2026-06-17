@@ -192,7 +192,7 @@ wasm: | $(WASMDIR)
 	  examples/wasm/platform_wasm.c src/dg_keyqueue.c $(DG_ENGINE_SRCS) \
 	  -sINVOKE_RUN=0 -sALLOW_MEMORY_GROWTH=1 \
 	  -sEXPORTED_FUNCTIONS=_main,_wasm_push_key \
-	  -sEXPORTED_RUNTIME_METHODS=callMain,FS \
+	  -sEXPORTED_RUNTIME_METHODS=callMain,FS,HEAPU32 \
 	  -o $(WASMDIR)/doom.js
 	@cp examples/wasm/index.html $(WASMDIR)/
 	@echo "built $(WASMDIR)/{doom.js,doom.wasm,index.html}"

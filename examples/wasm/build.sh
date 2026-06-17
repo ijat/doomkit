@@ -38,7 +38,7 @@ emcc -O2 -w \
   -sINVOKE_RUN=0 \
   -sALLOW_MEMORY_GROWTH=1 \
   -sEXPORTED_FUNCTIONS=_main,_wasm_push_key \
-  -sEXPORTED_RUNTIME_METHODS=callMain,FS \
+  -sEXPORTED_RUNTIME_METHODS=callMain,FS,HEAPU32 \
   -o "$OUT/doom.js"
 
 cp "$HERE/index.html" "$OUT/"

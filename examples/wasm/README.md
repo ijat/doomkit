@@ -68,6 +68,16 @@ menus.
 | `EM_ASM({ dgDrawFrame(...) }, ...)` | C → JS each frame to paint `DG_ScreenBuffer` onto the canvas |
 | `_wasm_push_key` (exported) | JS → C: queue a DOOM key event into `dg_keyqueue` |
 
+## Troubleshooting
+
+- **`TypeError: ... heap is undefined` in `dgDrawFrame`** — the build didn't
+  expose the WASM heap to JS. The framebuffer copy needs `HEAPU32` in
+  `EXPORTED_RUNTIME_METHODS` (the `make wasm` target / `build.sh` already include
+  it). If you hit this, **rebuild** (`make wasm`) and **hard-refresh** the page
+  (Cmd/Ctrl+Shift+R) so the browser drops the cached `doom.js`.
+- **Black canvas, no error** — make sure you actually picked a WAD; the game only
+  starts after `Module.callMain` runs, which happens on file select.
+
 ## Notes & limits
 
 - **Pixel order:** `DG_ScreenBuffer` is `0x00RRGGBB`; `dgDrawFrame` unpacks each
