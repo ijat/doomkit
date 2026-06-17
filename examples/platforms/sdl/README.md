@@ -1,0 +1,50 @@
+# sdl — DOOM in a real desktop window (SDL2)
+
+A "real" port: [SDL2](https://www.libsdl.org/) gives us a window, a pixel
+texture, a clock, and keyboard events, and we wire those into the six `DG_*`
+callbacks. Read it after [`../null/`](../null) — the structure is identical, only
+the backend differs.
+
+## What you need
+
+1. **SDL2** installed (`brew install sdl2`, `apt install libsdl2-dev`, …).
+2. **The upstream DOOM engine sources** (this package doesn't vendor them) — see
+   the root [README](../../../README.md#running-real-doom).
+3. **A WAD** (the free shareware `doom1.wad` works).
+
+## Build & run
+
+This port uses the *classic* doomgeneric style: it defines the `DG_*` symbols
+directly and is compiled together with the engine (no shared library).
+
+```sh
+cc -Iinclude $(sdl2-config --cflags) \
+   examples/platforms/sdl/platform_sdl.c \
+   src/dg_keyqueue.c src/dg_keymap.c \
+   <engine_dir>/*.c \
+   $(sdl2-config --libs) -o doom
+
+./doom -iwad /path/to/doom1.wad
+```
+
+(Drop the upstream engine `.c` files in for `<engine_dir>/*.c`; they provide
+`doomgeneric_Create()` / `doomgeneric_Tick()`.)
+
+There is no `make` target for this one because it needs SDL2 **and** the engine
+to produce a playable binary.
+
+## What it demonstrates
+
+| Callback | SDL backing |
+|----------|-------------|
+| `DG_Init` | create an SDL window + streaming RGB texture |
+| `DG_DrawFrame` | upload `DG_ScreenBuffer` to the texture, present, pump events |
+| `DG_GetTicksMs` / `DG_SleepMs` | `SDL_GetTicks` / `SDL_Delay` |
+| `DG_GetKey` | pop from `dg_keyqueue` (filled while pumping SDL events) |
+
+Input shows the two helpers working together: `dg_keymap_from_sdl()` turns an
+`SDL_Keycode` into a DOOM key code, and `dg_keyqueue` carries it from SDL's event
+pump to `DG_GetKey`.
+
+Controls: arrows move, **Ctrl** fires, **Space** opens doors, **Esc** opens the
+menu.
