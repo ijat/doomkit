@@ -1,41 +1,19 @@
 # Examples
 
-Each example is one *port* — an implementation of the six `DG_*` callbacks for a
-particular backend. They all have the same shape; only the backend differs.
+There are two kinds of example, split by *how they connect to the engine*:
 
-| File | Backend | Deps | Built by `make`? | What it shows |
-|------|---------|------|------------------|----------------|
-| [`null/platform_null.c`](null/platform_null.c) | none (headless) | none | ✅ `make run-null` | The whole contract running with a *fake engine*; writes `frame.ppm`. The best place to start reading. |
-| [`sdl/platform_sdl.c`](sdl/platform_sdl.c) | SDL2 | SDL2 | ❌ (needs SDL + engine) | A real windowed port, using the key helpers. |
-| [`template/platform_template.c`](template/platform_template.c) | yours | none | ❌ | A blank skeleton with six TODOs — copy this to start a new port. |
-| [`minimal_main.c`](minimal_main.c) | — | — | ❌ | The canonical `Create()` + `Tick()` loop on its own. |
-| [`wasm/platform_wasm.c`](wasm/) | browser (WebAssembly) | Emscripten | ✅ `make wasm` | Runs DOOM in a `<canvas>`; pick a WAD in the page. |
-| [`kotlin-android/`](kotlin-android/) | Android (Kotlin) | NDK/JNI | ❌ | Renders to a `Surface`; engine compiled into the app `.so`. |
+| Folder | Mechanism | Use when… |
+|--------|-----------|-----------|
+| [`platforms/`](platforms/) | implement the six `DG_*` callbacks, compiled **with** the engine | you're putting DOOM on a new screen/device (desktop, browser, phone, headless) |
+| [`languages/`](languages/) | drive a **prebuilt** `libdoomgeneric` over an FFI (`make lib` first) | you want to run DOOM from another language (Go, C#, Java, Python, Rust, Node, …) |
 
-> The language-FFI examples (drive a prebuilt `libdoomgeneric` from Go, C#,
-> Java, Python, Rust, …) live one level down in
-> [`languages/`](languages/).
+Plus [`minimal_main.c`](minimal_main.c) — the canonical `doomgeneric_Create()` +
+`doomgeneric_Tick()` loop on its own.
 
-## Why are some not built by `make`?
+New here? Start with [`platforms/null/platform_null.c`](platforms/null/platform_null.c):
+it's heavily commented and actually runs (`make run-null`). Then copy
+[`platforms/template/platform_template.c`](platforms/template/platform_template.c)
+and fill in the six TODOs for your target.
 
-`make run-null` builds and runs the headless example because it needs nothing
-external. The SDL and template examples need either a library (SDL2) **and/or**
-the actual DOOM engine sources (which provide `doomgeneric_Create()` /
-`doomgeneric_Tick()`) to link into a playable binary. This package intentionally
-does **not** vendor the 73k-line engine — see the root `README.md` for how to
-drop it in.
-
-## The pattern every port follows
-
-```
-DG_Init()           open display + input
-DG_DrawFrame()      blit DG_ScreenBuffer, then pump OS events into the key queue
-DG_SleepMs()        sleep
-DG_GetTicksMs()     monotonic ms clock
-DG_GetKey()         pop one event from the key queue  (one-liner via dg_keyqueue)
-DG_SetWindowTitle() optional
-main()              doomgeneric_Create(); for(;;) doomgeneric_Tick();
-```
-
-Read `null/platform_null.c` first (it is heavily commented and runnable), then
-copy `template/platform_template.c` and fill in the six TODOs for your platform.
+See the root [README](../README.md#pick-your-platform) for the full
+"pick your platform" matrix.

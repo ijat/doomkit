@@ -11,9 +11,9 @@
 # =============================================================================
 set -e
 
-ENGINE="${ENGINE:-../../../doomgeneric/doomgeneric}"   # upstream engine sources
+ENGINE="${ENGINE:-../../../../doomgeneric/doomgeneric}"  # upstream engine sources
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$HERE/../.."                                     # doomkit project root
+ROOT="$HERE/../../.."                                    # doomkit project root
 OUT="$HERE/out"
 
 command -v emcc >/dev/null 2>&1 || { echo "ERROR: emcc not found. Install the Emscripten SDK (emsdk) and 'source emsdk_env.sh'."; exit 1; }

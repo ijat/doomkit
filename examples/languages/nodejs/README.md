@@ -54,4 +54,4 @@ module-level `callbacks` object for the whole run.
   native path and lets C call JS via thread-safe functions.
 - **Run the WebAssembly build in Node**: `make wasm` output (`doom.js`) runs
   under Node's `WebAssembly` too — headless, so you'd save frames to disk
-  instead of a `<canvas>`. See [`examples/wasm/`](../../wasm/).
+  instead of a `<canvas>`. See [`examples/platforms/wasm/`](../../platforms/wasm/).

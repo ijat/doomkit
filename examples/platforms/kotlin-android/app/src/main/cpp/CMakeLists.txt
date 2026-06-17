@@ -13,7 +13,7 @@ project(doom)
 # Where you copied the upstream doomgeneric engine .c/.h files and this
 # package's include/ + src/. Adjust these two paths to your checkout.
 set(ENGINE_DIR  ${CMAKE_SOURCE_DIR}/engine)              # upstream engine sources
-set(PKG_DIR     ${CMAKE_SOURCE_DIR}/../../../../../..)   # doomkit root
+set(PKG_DIR     ${CMAKE_SOURCE_DIR}/../../../../../../..) # doomkit root
 
 # Engine sources: every .c EXCEPT the desktop platform files (doomgeneric_*.c),
 # because native-doom.cpp provides the DG_* symbols itself.

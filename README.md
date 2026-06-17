@@ -33,11 +33,11 @@ Find your row, open that folder, follow its README.
 
 | I want to run DOOM… | Example | How it connects | Start with | Status |
 |----------------------|---------|-----------------|------------|--------|
-| **Headless / CI / to learn** | [`examples/null/`](examples/null) | zero-dependency port | `make run-null` | ✅ runs |
-| **In a desktop window** | [`examples/sdl/`](examples/sdl) | SDL2 port | `examples/sdl/` README | ◦ ref |
-| **On a brand-new platform** | [`examples/template/`](examples/template) | fill in 6 TODOs | copy the file | — skeleton |
-| **In a web browser** | [`examples/wasm/`](examples/wasm) | Emscripten → `<canvas>` | `make wasm` | ◦ ref |
-| **On Android** | [`examples/kotlin-android/`](examples/kotlin-android) | Kotlin + NDK/JNI | Android Studio | ◦ skeleton |
+| **Headless / CI / to learn** | [`examples/platforms/null/`](examples/platforms/null) | zero-dependency port | `make run-null` | ✅ runs |
+| **In a desktop window** | [`examples/platforms/sdl/`](examples/platforms/sdl) | SDL2 port | `examples/platforms/sdl/` README | ◦ ref |
+| **On a brand-new platform** | [`examples/platforms/template/`](examples/platforms/template) | fill in 6 TODOs | copy the file | — skeleton |
+| **In a web browser** | [`examples/platforms/wasm/`](examples/platforms/wasm) | Emscripten → `<canvas>` | `make wasm` | ◦ ref |
+| **On Android** | [`examples/platforms/kotlin-android/`](examples/platforms/kotlin-android) | Kotlin + NDK/JNI | Android Studio | ◦ skeleton |
 | **From C / C++** | [`…/languages/c`](examples/languages/c) · [`cpp`](examples/languages/cpp) | link + register | `make lib` | ✅ verified |
 | **From Go** | [`…/languages/go`](examples/languages/go) | cgo | `make lib` | ◦ ref |
 | **From C# / .NET** | [`…/languages/csharp`](examples/languages/csharp) | P/Invoke | `make lib` | ✅ verified |
@@ -79,14 +79,16 @@ doomkit/
 │   ├── dg_keyqueue.c · dg_keymap.c · dg_palette.c · dg_framebuffer.c
 ├── bindings/                 ← flat C ABI so OTHER languages can drive the engine
 │   └── doomgeneric_capi.{h,c} · register 6 callbacks at runtime; build a shared lib
-├── examples/                 ← THE "IMPLEMENTATION CODE", as ports
-│   ├── null/    · zero-dependency headless port — runnable! (make run-null)
-│   ├── sdl/     · reference SDL2 port
-│   ├── template/· copy-me skeleton for a new platform
-│   ├── minimal_main.c
-│   ├── wasm/    · DOOM in the browser via Emscripten — runnable! (make wasm)
-│   ├── kotlin-android/· Android (Kotlin + NDK/JNI) skeleton
-│   └── languages/· C, C++, Go, C#, Java, Python, Rust — one binding each
+├── examples/                 ← THE "IMPLEMENTATION CODE"
+│   ├── platforms/  ← implement the 6 DG_*, compiled WITH the engine
+│   │   ├── null/        · zero-dependency headless port — runnable! (make run-null)
+│   │   ├── sdl/         · reference SDL2 desktop port
+│   │   ├── template/    · copy-me skeleton for a new platform
+│   │   ├── wasm/        · DOOM in the browser via Emscripten — runnable! (make wasm)
+│   │   └── kotlin-android/· Android (Kotlin + NDK/JNI) skeleton
+│   ├── languages/  ← FFI to a prebuilt libdoomgeneric (make lib)
+│   │   └── c · cpp · go · csharp · java · python · rust · nodejs
+│   └── minimal_main.c · the canonical Create()/Tick() loop
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← ARCHITECTURE.md · CONTRACT.md · PORTING.md
 ├── Makefile                  ← make test · coverage · run-null · lib · wasm
@@ -151,8 +153,8 @@ int DG_GetKey(int *pressed, unsigned char *doomKey) {
 ```
 
 That's the entire input path. The full worked version is
-[`examples/null/platform_null.c`](examples/null/platform_null.c) (runnable) and
-[`examples/sdl/platform_sdl.c`](examples/sdl/platform_sdl.c) (real window).
+[`examples/platforms/null/platform_null.c`](examples/platforms/null/platform_null.c) (runnable) and
+[`examples/platforms/sdl/platform_sdl.c`](examples/platforms/sdl/platform_sdl.c) (real window).
 
 ---
 
@@ -203,7 +205,7 @@ This package is the interface, not the engine. To get a playable build:
 
 ```sh
 cc -Iinclude -I<engine_dir> \
-   examples/template/platform_myplatform.c \
+   examples/platforms/template/platform_myplatform.c \
    src/dg_keyqueue.c src/dg_keymap.c \
    <engine_dir>/*.c <platform libs> -o doom
 ./doom -iwad doom1.wad
@@ -221,7 +223,7 @@ DOOM is C, but you can drive it from almost anything. The
 once (`make lib ENGINE=/path/to/doomgeneric/doomgeneric`) and load it from any
 language's FFI. There is one worked, documented example per language in
 [`examples/languages/`](examples/languages/), plus an Android (Kotlin + NDK/JNI)
-skeleton in [`examples/kotlin-android/`](examples/kotlin-android/).
+skeleton in [`examples/platforms/kotlin-android/`](examples/platforms/kotlin-android/).
 
 | Language | FFI | Language | FFI |
 |----------|-----|----------|-----|
@@ -238,7 +240,7 @@ language).
 
 `make wasm ENGINE=/path/to/doomgeneric/doomgeneric` compiles DOOM to WebAssembly
 with Emscripten and renders it to a `<canvas>` — serve `build/wasm/` and pick a
-WAD in the page. See [`examples/wasm/`](examples/wasm/).
+WAD in the page. See [`examples/platforms/wasm/`](examples/platforms/wasm/).
 
 ## Documentation
 

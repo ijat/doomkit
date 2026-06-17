@@ -28,7 +28,7 @@ You need three things in one build:
 ## Step 1 — copy the template
 
 ```sh
-cp examples/template/platform_template.c platform_myplatform.c
+cp examples/platforms/template/platform_template.c platform_myplatform.c
 ```
 
 It already contains `main()` and empty versions of the six callbacks, wired to
@@ -38,8 +38,8 @@ the `dg_keyqueue` helper.
 
 ## Step 2 — fill in the six functions
 
-Implement them against your platform's API. Use `examples/sdl/platform_sdl.c` as
-a worked reference and `examples/null/platform_null.c` to see them run with no
+Implement them against your platform's API. Use `examples/platforms/sdl/platform_sdl.c` as
+a worked reference and `examples/platforms/null/platform_null.c` to see them run with no
 backend at all.
 
 1. **`DG_Init`** — open a window/surface of `DOOMGENERIC_RESX × DOOMGENERIC_RESY`
@@ -96,7 +96,7 @@ You should get a window with the title screen. Arrow keys move, `Ctrl` fires,
 | Colours look swapped (red/blue) | Your display expects a different channel order; adjust the shifts (see `dg_palette`'s `red_shift`/`blue_shift`) or your texture format. |
 | Game runs too fast / too slow | `DG_GetTicksMs` not in milliseconds, or not monotonic. |
 | Keys do nothing | You queued host codes instead of DOOM codes — run them through `dg_keymap` first. |
-| Image stuck in a corner | You ignored the centring offset; see `dg_framebuffer` / `examples/null`. |
+| Image stuck in a corner | You ignored the centring offset; see `dg_framebuffer` / `examples/platforms/null`. |
 
 ---
 
