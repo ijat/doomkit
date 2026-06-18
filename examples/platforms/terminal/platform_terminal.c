@@ -57,6 +57,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <time.h>
 #include <signal.h>
 #include <termios.h>
@@ -91,6 +92,25 @@ static uint32_t s_start_ms = 0;
 static struct termios s_orig_termios;
 static int            s_termios_saved = 0;
 
+/* The real terminal we draw frames to. The engine prints a startup banner
+ * (Z_Init/W_Init/"DOOM Shareware"/I_InitGraphics...) to stdout during
+ * doomgeneric_Create; we redirect fd 1 to /dev/null so none of that noise
+ * reaches the screen, and send our own output through this saved copy. */
+static int            s_tty_fd = STDOUT_FILENO;
+
+/* write() may return a short count (limited tty buffer); loop until the whole
+ * buffer is out or we hit a real error, so a frame is never truncated. */
+static void write_all(int fd, const char *buf, size_t len)
+{
+    size_t off = 0;
+    while (off < len) {
+        ssize_t w = write(fd, buf + off, len - off);
+        if (w > 0) { off += (size_t)w; continue; }
+        if (w < 0 && (errno == EINTR || errno == EAGAIN)) continue;
+        break;   /* unrecoverable error; drop the rest */
+    }
+}
+
 /* ANSI escapes used below:
  *   \033[2J  clear screen        \033[H   cursor to home (top-left)
  *   \033[?25l hide cursor        \033[?25h show cursor
@@ -101,7 +121,7 @@ static void term_restore(void)
         tcsetattr(STDIN_FILENO, TCSANOW, &s_orig_termios);
     /* show cursor, reset colours, leave a clean line for the next prompt */
     const char *cleanup = "\033[0m\033[?25h\033[H\033[2J";
-    ssize_t r = write(STDOUT_FILENO, cleanup, strlen(cleanup));
+    ssize_t r = write(s_tty_fd, cleanup, strlen(cleanup));
     (void)r;
 }
 
@@ -119,6 +139,21 @@ static void term_setup(void)
     if (tcgetattr(STDIN_FILENO, &s_orig_termios) == 0)
         s_termios_saved = 1;
 
+    /* Save a private copy of the real terminal, then silence the engine's
+     * stdout: everything it printf()s during startup (and any I_Error text)
+     * now goes to /dev/null instead of scrolling across our frame. We keep
+     * drawing through s_tty_fd. If anything here fails we just fall back to
+     * writing frames to the original stdout. */
+    int dup_fd = dup(STDOUT_FILENO);
+    if (dup_fd != -1) {
+        s_tty_fd = dup_fd;
+        int devnull = open("/dev/null", O_WRONLY);
+        if (devnull != -1) {
+            dup2(devnull, STDOUT_FILENO);
+            close(devnull);
+        }
+    }
+
     struct termios raw = s_orig_termios;
     /* raw input: no canonical line buffering, no echo, no signal/flow munging */
     raw.c_lflag &= ~(unsigned)(ICANON | ECHO | ISIG | IEXTEN);
@@ -127,17 +162,20 @@ static void term_setup(void)
     raw.c_cc[VTIME] = 0;   /* ...even with zero bytes available (non-blocking) */
     tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 
-    /* Belt and braces: also mark the fd non-blocking, so our drain loop in
-     * DG_GetKey never stalls the engine waiting for input. */
-    int fl = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, fl | O_NONBLOCK);
+    /* NOTE: we deliberately do NOT set O_NONBLOCK on stdin. VMIN=0/VTIME=0
+     * already make our input reads return immediately, and on a terminal
+     * fds 0/1/2 usually share one open file description -- so O_NONBLOCK on
+     * stdin also makes stdout non-blocking, which turns each frame's large
+     * write() into a short write whose tail is silently dropped (the picture
+     * collapses to ~one row). Blocking writes let write_all() flush the whole
+     * frame. */
 
     atexit(term_restore);
     signal(SIGINT,  on_signal);
     signal(SIGTERM, on_signal);
 
     const char *init = "\033[2J\033[H\033[?25l";   /* clear, home, hide cursor */
-    ssize_t r = write(STDOUT_FILENO, init, strlen(init));
+    ssize_t r = write(s_tty_fd, init, strlen(init));
     (void)r;
 }
 
@@ -247,6 +285,14 @@ static void pump_terminal_input(void)
     for (ssize_t i = 0; i < n; i++) {
         unsigned char c = buf[i];
 
+        /* Raw mode cleared ISIG, so Ctrl-C never becomes a SIGINT -- it just
+         * arrives here as byte 0x03. Treat it (and Ctrl-D, 0x04) as "quit".
+         * exit() runs the atexit(term_restore) hook, so the terminal is left
+         * in a clean state. */
+        if (c == 0x03 || c == 0x04) {
+            exit(0);
+        }
+
         if (c == 0x1b /* ESC */) {
             /* Could be a real Escape, or the lead-in of an arrow key:
              *   ESC '[' 'A'    up        ESC '[' 'B'   down
@@ -306,7 +352,7 @@ void DG_DrawFrame(void)
      * the window Just Works.) Fall back to 80x24 if the ioctl is unavailable. */
     struct winsize ws;
     int cols = 80, rows = 24;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == 0 && ws.ws_col && ws.ws_row) {
+    if (ioctl(s_tty_fd, TIOCGWINSZ, &ws) == 0 && ws.ws_col && ws.ws_row) {
         cols = ws.ws_col;
         rows = ws.ws_row - 1;   /* leave the bottom line free of scrolling */
     }
@@ -367,10 +413,13 @@ void DG_DrawFrame(void)
         }
         if (ry + 1 < rows) { *p++ = '\r'; *p++ = '\n'; }
     }
-    p += sprintf(p, "\033[0m");
+    /* Erase from the cursor (end of the last drawn row) to the end of the
+     * screen. The aspect cap means the picture fills only the top ~cols*0.31
+     * rows; without this the engine's startup log (or any earlier scrollback)
+     * stays visible in the rows below the frame. */
+    p += sprintf(p, "\033[0m\033[J");
 
-    ssize_t w = write(STDOUT_FILENO, s_out, (size_t)(p - s_out));
-    (void)w;
+    write_all(s_tty_fd, s_out, (size_t)(p - s_out));
 }
 
 void DG_SleepMs(uint32_t ms)
@@ -409,7 +458,7 @@ void DG_SetWindowTitle(const char *title)
     char esc[256];
     int n = snprintf(esc, sizeof esc, "\033]0;%s\a", title ? title : "");
     if (n > 0) {
-        ssize_t r = write(STDOUT_FILENO, esc, (size_t)n);
+        ssize_t r = write(s_tty_fd, esc, (size_t)n);
         (void)r;
     }
 }
