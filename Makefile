@@ -84,7 +84,7 @@ EMCC    ?= emcc
 WASMDIR  = $(BUILD)/wasm
 DG_ENGINE_SRCS = $(addprefix $(ENGINE)/,$(addsuffix .c,$(DG_ENGINE_NAMES)))
 
-.PHONY: all test coverage run-null run-null-engine lib wasm clean
+.PHONY: all test coverage run-null run-null-engine run-terminal lib wasm clean
 all: test
 
 # -----------------------------------------------------------------------------
@@ -181,6 +181,42 @@ $(BUILD)/null_engine: examples/platforms/null/platform_null_engine.c | $(BUILD)
 	done
 	$(CC) $(CSTD) $(WARN) -Iinclude -I$(ENGINE) \
 	  examples/platforms/null/platform_null_engine.c $(NULL_ENGINE_OBJS) -lm -o $@
+
+# -----------------------------------------------------------------------------
+#  make run-terminal  -- the SAME real engine, drawn as colored ASCII in the TTY.
+#
+#  Like `run-null-engine`, but platform_terminal.c renders every frame to your
+#  terminal and reads the keyboard live, so you can actually play. Interactive,
+#  so it is NOT time-boxed and its output is NOT redirected. Same requirements:
+#  the upstream engine sources AND a WAD.
+#    make run-terminal ENGINE=/path/to/doomgeneric/doomgeneric WAD=/path/doom1.wad
+#  Use a truecolor terminal ~80x50 or larger; quit with Ctrl-C or DOOM's menu.
+# -----------------------------------------------------------------------------
+TERMINAL_OBJDIR = $(BUILD)/terminal_engine_obj
+TERMINAL_OBJS   = $(addprefix $(TERMINAL_OBJDIR)/,$(addsuffix .o,$(DG_ENGINE_NAMES)))
+
+run-terminal: $(BUILD)/terminal_doom
+	@test -n "$(WAD)" || { \
+	  echo "ERROR: no WAD given. The real engine needs game data, e.g.:"; \
+	  echo "  make run-terminal ENGINE=$(ENGINE) WAD=/path/to/doom1.wad"; \
+	  exit 1; }
+	@test -f "$(WAD)" || { echo "ERROR: WAD not found: $(WAD)"; exit 1; }
+	@cd $(BUILD) && ./terminal_doom -iwad "$(abspath $(WAD))"
+
+$(BUILD)/terminal_doom: examples/platforms/terminal/platform_terminal.c | $(BUILD)
+	@test -f "$(ENGINE)/doomgeneric.h" || { \
+	  echo "ERROR: DOOM engine sources not found at ENGINE=$(ENGINE)"; \
+	  echo "  This package does not vendor the engine. Point ENGINE at upstream"; \
+	  echo "  doomgeneric's 'doomgeneric/' folder (the one with d_main.c), e.g.:"; \
+	  echo "    make run-terminal ENGINE=/path/to/doomgeneric/doomgeneric WAD=..."; \
+	  exit 1; }
+	@echo "=================== building terminal_doom from $(ENGINE) ==================="
+	@rm -rf $(TERMINAL_OBJDIR) && mkdir -p $(TERMINAL_OBJDIR)
+	@for n in $(DG_ENGINE_NAMES); do \
+	  $(CC) -w -I$(ENGINE) -Iinclude -c "$(ENGINE)/$$n.c" -o "$(TERMINAL_OBJDIR)/$$n.o" || exit 1; \
+	done
+	$(CC) $(CSTD) $(WARN) -Iinclude -I$(ENGINE) \
+	  examples/platforms/terminal/platform_terminal.c $(TERMINAL_OBJS) -lm -o $@
 
 # -----------------------------------------------------------------------------
 #  make lib  -- build libdoomgeneric (engine + C-ABI shim) for the bindings.
