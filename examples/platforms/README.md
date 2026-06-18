@@ -9,6 +9,7 @@ language instead, see [`../languages/`](../languages/).
 |------|---------|------|------------------|----------------|
 | [`null/platform_null.c`](null/platform_null.c) | none (headless) | none | ✅ `make run-null` | The whole contract running with a *fake engine*; writes `frame.ppm`. The best place to start reading. |
 | [`null/platform_null_engine.c`](null/platform_null_engine.c) | none (headless) | engine + WAD | ✅ `make run-null-engine` | The same six callbacks, but driving the **real engine** with no display; ticks ~10 s and writes `frame_engine.ppm`. |
+| [`terminal/platform_terminal.c`](terminal/platform_terminal.c) | terminal (termios) | engine + WAD | ✅ `make run-terminal` | The real engine drawn as **colored ASCII** in your TTY, played with the keyboard. Same six callbacks; the "screen" is the terminal. |
 | [`sdl/platform_sdl.c`](sdl/platform_sdl.c) | SDL2 | SDL2 | ❌ (needs SDL + engine) | A real windowed desktop port, using the key helpers. |
 | [`template/platform_template.c`](template/platform_template.c) | yours | none | ❌ | A blank skeleton with six TODOs — copy this to start a new port. |
 | [`wasm/`](wasm/) | browser (WebAssembly) | Emscripten | ✅ `make wasm` | Runs DOOM in a `<canvas>`; pick a WAD in the page. |
@@ -23,10 +24,11 @@ need only a compiler / Emscripten. The SDL and template ports need a library
 This package intentionally does **not** vendor the 73k-line engine — see the root
 `README.md` for how to drop it in.
 
-`make run-null-engine` is the in-between case: `make` *does* build it, but only
-when you point it at the engine sources and a WAD
-(`make run-null-engine ENGINE=... WAD=...`), since it links the real engine
-rather than a fake one.
+`make run-null-engine` and `make run-terminal` are the in-between case: `make`
+*does* build them, but only when you point them at the engine sources and a WAD
+(`... ENGINE=... WAD=...`), since they link the real engine rather than a fake
+one. `run-terminal` is the same deal as `run-null-engine`, just with a visible,
+playable terminal frontend instead of a one-shot `.ppm` dump.
 
 ## The pattern every port follows
 

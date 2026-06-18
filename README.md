@@ -79,6 +79,7 @@ open that folder, follow its README.
 |----------------------|---------|-----------------|------------|--------|
 | **Headless / CI / to learn** | [`examples/platforms/null/`](examples/platforms/null) | zero-dependency port | `make run-null` | ✅ runs |
 | **Headless, but real DOOM** | [`examples/platforms/null/`](examples/platforms/null) | real engine, no display | `make run-null-engine` | ✅ runs (needs engine + WAD) |
+| **In your terminal (ASCII)** | [`examples/platforms/terminal/`](examples/platforms/terminal) | real engine → colored ASCII | `make run-terminal` | ✅ playable (needs engine + WAD) |
 | **In a desktop window** | [`examples/platforms/sdl/`](examples/platforms/sdl) | SDL2 port | `examples/platforms/sdl/` README | ◦ ref |
 | **On a brand-new platform** | [`examples/platforms/template/`](examples/platforms/template) | fill in 6 TODOs | copy the file | — skeleton |
 | **In a web browser** | [`examples/platforms/wasm/`](examples/platforms/wasm) | Emscripten → `<canvas>` | `make wasm` | ◦ ref |
@@ -127,6 +128,7 @@ doomkit/
 ├── examples/                 ← THE "IMPLEMENTATION CODE"
 │   ├── platforms/  ← implement the 6 DG_*, compiled WITH the engine
 │   │   ├── null/        · headless: fake-engine demo (make run-null) + real-engine, no-display (make run-null-engine)
+│   │   ├── terminal/    · real DOOM as colored ASCII in your TTY — playable! (make run-terminal)
 │   │   ├── sdl/         · reference SDL2 desktop port
 │   │   ├── template/    · copy-me skeleton for a new platform
 │   │   ├── wasm/        · DOOM in the browser via Emscripten — runnable! (make wasm)
@@ -136,7 +138,7 @@ doomkit/
 │   └── minimal_main.c · the canonical Create()/Tick() loop
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← PORTING.md · CONTRACT.md · ARCHITECTURE.md · WAD.md · SOUND.md · GLOSSARY.md
-├── Makefile                  ← make test · coverage · run-null · run-null-engine · lib · wasm
+├── Makefile                  ← make test · coverage · run-null · run-null-engine · run-terminal · lib · wasm
 ├── LICENSE · NOTICE.md       ← GPLv2 (+ Unity MIT) and attribution
 ```
 
