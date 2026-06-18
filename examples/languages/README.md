@@ -31,6 +31,7 @@ frames in a real desktop window instead.)
 | Java | Panama FFM (JDK 22+) | [`java/`](java) | pure Java, no JNI |
 | Python | ctypes (stdlib) | [`python/`](python) | shortest binding |
 | Rust | `extern "C"` | [`rust/`](rust) | no crates needed |
+| Zig | `extern` + `build.zig` | [`zig/`](zig) | no packages needed |
 | Node.js | koffi (FFI) | [`nodejs/`](nodejs) | `npm install`, no native build |
 | Kotlin/Android | NDK + JNI | [`../platforms/kotlin-android/`](../platforms/kotlin-android) | engine compiled into the app `.so` |
 
@@ -57,7 +58,7 @@ loop: tick()                 # each tick ends by calling your draw_frame
 
 The C ABI and shared library are real and tested: in this repo's environment the
 **C, C++, Python, Rust, C#, and Node.js** bindings were compiled/loaded against
-the actual `libdoomgeneric` and call through it successfully. **Go, Java, and
-Kotlin/Android** are provided as correct reference code but need their own
-toolchains (Go, JDK 22, Android SDK/NDK) to build. None *play* DOOM without a WAD
+the actual `libdoomgeneric` and call through it successfully. **Go, Java, Zig,
+and Kotlin/Android** are provided as correct reference code but need their own
+toolchains (Go, JDK 22, Zig 0.14, Android SDK/NDK) to build. None *play* DOOM without a WAD
 and the upstream engine — they are bindings, not a packaged game.

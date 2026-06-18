@@ -1,6 +1,6 @@
 # bindings — the shared library every language example uses
 
-The desktop language examples (C, C++, Go, C#, Java, Python, Rust) all load the
+The desktop language examples (C, C++, Go, C#, Java, Python, Rust, Zig) all load the
 **same shared library**, `libdoomgeneric`, and talk to it through the flat C ABI
 declared in [`doomgeneric_capi.h`](doomgeneric_capi.h). This folder is that ABI.
 Build the library **once**, then point any example at it.

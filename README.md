@@ -90,6 +90,7 @@ open that folder, follow its README.
 | **From Java** | [`…/languages/java`](examples/languages/java) | Panama FFM (JDK 22+) | `make lib` | ◦ ref |
 | **From Python** | [`…/languages/python`](examples/languages/python) | ctypes | `make lib` | ✅ verified |
 | **From Rust** | [`…/languages/rust`](examples/languages/rust) | `extern "C"` | `make lib` | ✅ verified |
+| **From Zig** | [`…/languages/zig`](examples/languages/zig) | `extern` + `build.zig` | `make lib` | ◦ ref |
 | **From Node.js** | [`…/languages/nodejs`](examples/languages/nodejs) | koffi (FFI) | `make lib` | ✅ verified |
 
 **Status:** ✅ built & exercised in this repo · ◦ correct reference code, needs
@@ -134,7 +135,7 @@ doomkit/
 │   │   ├── wasm/        · DOOM in the browser via Emscripten — runnable! (make wasm)
 │   │   └── kotlin-android/· Android (Kotlin + NDK/JNI) skeleton
 │   ├── languages/  ← FFI to a prebuilt libdoomgeneric (make lib)
-│   │   └── c · cpp · go · csharp · csharp-avalonia (windowed) · java · python · rust · nodejs
+│   │   └── c · cpp · go · csharp · csharp-avalonia (windowed) · java · python · rust · zig · nodejs
 │   └── minimal_main.c · the canonical Create()/Tick() loop
 ├── tests/                    ← Unity test suites (+ vendored Unity)
 ├── docs/                     ← PORTING.md · CONTRACT.md · ARCHITECTURE.md · WAD.md · SOUND.md · GLOSSARY.md
@@ -291,7 +292,8 @@ skeleton in [`examples/platforms/kotlin-android/`](examples/platforms/kotlin-and
 | C / C++ | link + register | Java | Panama FFM (JDK 22+) |
 | Go | cgo | Python | ctypes |
 | C# | P/Invoke | Rust | `extern "C"` |
-| Node.js | koffi (FFI) | Kotlin/Android | NDK + JNI |
+| Zig | `extern` + `build.zig` | Node.js | koffi (FFI) |
+| Kotlin/Android | NDK + JNI | | |
 
 Start with [`bindings/README.md`](bindings/README.md) (build the shared library),
 then [`examples/languages/README.md`](examples/languages/README.md) (pick a
